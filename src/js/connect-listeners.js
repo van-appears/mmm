@@ -1,5 +1,5 @@
-const convert = require("./convert-node");
 const constants = require("./constants");
+const fillOptions = require("./fill-options");
 
 const qs = id => {
   const nodes = document.querySelectorAll(id);
@@ -7,10 +7,11 @@ const qs = id => {
 };
 
 module.exports = function connectListeners(model) {
-  const { items, types } = model;
+  const { items, types, connections } = model;
   let currentIdx = null;
   let current = null;
 
+  const wrapper = qs(".wrapper");
   const controlArea = qs(".controls");
   const label = qs("#name");
   const play = qs("#play");
@@ -57,27 +58,13 @@ module.exports = function connectListeners(model) {
       if (control.type === "val") {
         controlValEls[cIndex].value = control.get();
       } else {
-        controlInEls[cIndex].replaceChildren();
-        const unselected = document.createElement("option");
-        unselected.setAttribute("value", -1);
-        unselected.text = "-";
-        if (control.get() === null || control.get() === undefined) {
-          unselected.setAttribute("selected", true);
-        }
-        controlInEls[cIndex].appendChild(unselected);
-
-        for (let nIndex = 0; nIndex < items.length; nIndex++) {
-          if (nIndex === index || items[nIndex].type === constants.EMPTY) {
-            continue;
-          }
-          const option = document.createElement("option");
-          option.setAttribute("value", nIndex);
-          option.text = items[nIndex].label();
-          if (control.get() === nIndex) {
-            option.setAttribute("selected", true);
-          }
-          controlInEls[cIndex].appendChild(option);
-        }
+        fillOptions(
+          controlInEls[cIndex],
+          control.get(),
+          items
+            .map(x => x.asOption())
+            .filter(x => x.value !== index && x.type !== constants.EMPTY),
+          true);
       }
     }
 
@@ -97,9 +84,19 @@ module.exports = function connectListeners(model) {
     };
   }
 
+  const windowGraph = qs("button[value=graph]");
+  windowGraph.onclick = function () {
+    wrapper.className = "wrapper graph";
+  }
+
+  const windowSequencer = qs("button[value=sequencer]");
+  windowSequencer.onclick = function () {
+    wrapper.className = "wrapper sequencer";
+  }
+
   play.onclick = function (evt) {
     if (current) {
-      current.play(evt.target.checked); // HMMM?
+      current.play(evt.target.checked);
     }
   };
 
@@ -122,11 +119,18 @@ module.exports = function connectListeners(model) {
 
   for (let index = 0; index < convertEls.length; index++) {
     convertEls[index].onclick = function (evt) {
-      console.log("convert", evt.target, evt.target.value, current);
       if (current) {
         const lastControl = items[currentIdx];
         const newControl = types[evt.target.value](currentIdx);
         lastControl.setValuesTo(newControl);
+
+        const currentConnections = model.connections[currentIdx];
+        Object.keys(currentConnections).forEach(key => {
+          lastControl.connector().connect(currentConnections[key]);
+          newControl.connector().connect(currentConnections[key]);
+        });
+
+        lastControl.destroy();
         items[currentIdx] = newControl;
         connect(currentIdx);
       }

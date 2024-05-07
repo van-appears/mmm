@@ -1,12 +1,16 @@
 const Node = require("./Node");
-const thistype = "filter";
+const constants = require("../constants");
 
 class Filter extends Node {
   constructor(ctx, model, idx) {
-    super(ctx, model, idx, thistype, true);
+    super(ctx, model, idx, constants.FILTER, true);
     this.model = model;
     this.filter = ctx.createBiquadFilter();
     this.filter.type = "lowpass";
+
+    this._controls = this.initControls();
+    this._controls[0].set(100);
+    this._controls[2].set(0.707);
   }
 
   connector() {
@@ -33,6 +37,10 @@ class Filter extends Node {
   }
 
   controls() {
+    return this._controls;
+  }
+
+  initControls() {
     const that = this;
     return [
       {
@@ -57,7 +65,8 @@ class Filter extends Node {
           that.replaceOtherOnParam(
             that.freqConnectValue,
             val,
-            that.filter.frequency
+            that.filter.frequency,
+            "freqConnect"
           );
           that.freqConnectValue = val;
         },
@@ -84,7 +93,12 @@ class Filter extends Node {
           return "Q Mod";
         },
         set(val) {
-          that.replaceOtherOnParam(that.qConnectValue, val, that.filter.Q);
+          that.replaceOtherOnParam(
+            that.qConnectValue,
+            val,
+            that.filter.Q,
+            "qConnect"
+          );
           that.qConnectValue = val;
         },
         get() {
@@ -97,7 +111,12 @@ class Filter extends Node {
           return "Input";
         },
         set(val) {
-          that.replaceOtherOnParam(that.inputConnectValue, val, that.filter);
+          that.replaceOtherOnParam(
+            that.inputConnectValue,
+            val,
+            that.filter,
+            "input"
+          );
           that.inputConnectValue = val;
         },
         get() {
@@ -111,7 +130,7 @@ class Filter extends Node {
 module.exports = function (ctx, model) {
   return function (idx) {
     const last = model.items[idx];
-    if (last.type === thistype) {
+    if ([constants.FILTER, constants.MICROPHONE].includes(last.type)) {
       return last;
     }
     return new Filter(ctx, model, idx);

@@ -1,0 +1,84 @@
+const Node = require("./Node");
+const constants = require("../constants");
+
+class Echo extends Node {
+  constructor(ctx, model, idx) {
+    super(ctx, model, idx, constants.ECHO, true);
+    this.delay = ctx.createDelay();
+    this.gain = ctx.createGain();
+
+    this.delay.connect(this.gain);
+    this.gain.connect(this.delay);
+    this._controls = this.initControls();
+    this._controls[0].set(1000);
+    this._controls[1].set(0.5);
+  }
+
+  connector() {
+    return this.gain;
+  }
+
+  controls() {
+    return this._controls;
+  }
+
+  initControls() {
+    const that = this;
+    return [
+      {
+        type: "val",
+        label() {
+          return "Time (ms)";
+        },
+        set(val) {
+          that.delayTimeValue = val;
+          that.delay.delayTime.setTargetAtTime(val, 0, 0);
+        },
+        get() {
+          return that.delayTimeValue;
+        }
+      },
+      {
+        type: "val",
+        label() {
+          return "Sustain";
+        },
+        set(val) {
+          that.gainValue = val;
+          that.gain.gain.setTargetAtTime(val, 0, 0);
+        },
+        get() {
+          return that.gainValue;
+        }
+      },
+      {
+        type: "in",
+        label() {
+          return "Input";
+        },
+        set(val) {
+          that.replaceOtherOnParam(
+            that.inputConnectValue,
+            val,
+            that.delay,
+            "input"
+          );
+          that.inputConnectValue = val;
+        },
+        get() {
+          return that.inputConnectValue;
+        }
+      }
+    ];
+  }
+}
+
+module.exports = function (ctx, model) {
+  return function (idx) {
+    const last = model.items[idx];
+    if ([constants.ECHO, constants.MICROPHONE].includes(last.type)) {
+      return last;
+    }
+    return new Echo(ctx, model, idx);
+  };
+};

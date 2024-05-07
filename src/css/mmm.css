@@ -35,9 +35,19 @@ body {
 
 .controls > *,
 .controls .control input,
-.controls .control select {
+.controls .control select,
+.wrapper .graph,
+.wrapper .sequencer {
   display: none;
 }
+
+.wrapper.graph .graph {
+  display: block;
+}
+.wrapper.sequencer .sequencer {
+  display: block;
+}
+
 .controls.playable .play {
   display: block;
 }

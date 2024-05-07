@@ -1,5 +1,5 @@
 const Node = require("./Node");
-const constants = require("./constants");
+const constants = require("../constants");
 
 class Oscillator extends Node {
   constructor(ctx, model, idx) {
@@ -9,6 +9,10 @@ class Oscillator extends Node {
     this.osc.type = "sine";
     this.osc.connect(this.gain);
     this.osc.start(0);
+
+    this._controls = this.initControls();
+    this._controls[0].set(100);
+    this._controls[2].set(1);
   }
 
   connector() {
@@ -30,12 +34,16 @@ class Oscillator extends Node {
 
   destroy() {
     super.destroy();
-    this.disconnectOtherFromParam(this.freqConnectValue, that.osc.frequency);
-    this.disconnectOtherFromParam(this.gainConnectValue, that.gain.gain);
+    this.disconnectOtherFromParam(this.freqConnectValue, this.osc.frequency);
+    this.disconnectOtherFromParam(this.gainConnectValue, this.gain.gain);
     this.osc.stop();
   }
 
   controls() {
+    return this._controls;
+  }
+
+  initControls() {
     const that = this;
     return [
       {
@@ -60,7 +68,8 @@ class Oscillator extends Node {
           that.replaceOtherOnParam(
             that.freqConnectValue,
             val,
-            that.osc.frequency
+            that.osc.frequency,
+            "freqConnect"
           );
           that.freqConnectValue = val;
         },
@@ -87,11 +96,16 @@ class Oscillator extends Node {
           return "Amp Mod";
         },
         set(val) {
-          that.replaceOtherOnParam(that.gainConnectValue, val, that.gain.gain);
+          that.replaceOtherOnParam(
+            that.gainConnectValue,
+            val,
+            that.gain.gain,
+            "gainConnect"
+          );
           that.gainConnectValue = val;
         },
         get() {
-          return that.gainValue;
+          return that.gainConnectValue;
         }
       }
     ];
@@ -101,7 +115,7 @@ class Oscillator extends Node {
 module.exports = function (ctx, model) {
   return function (idx) {
     const last = model.items[idx];
-    if (last.type === constants.OSCILLATOR) {
+    if ([constants.OSCILLATOR, constants.MICROPHONE].includes(last.type)) {
       return last;
     }
     return new Oscillator(ctx, model, idx);

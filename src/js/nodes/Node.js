@@ -15,21 +15,23 @@ class Node {
     };
   }
 
-  disconnectOtherFromParam(otherIdx, param) {
+  disconnectOtherFromParam(otherIdx, param, key) {
     if (otherIdx >= 0) {
-      model.items[otherIdx].connector().disconnect(param);
+      this.model.items[otherIdx].connector().disconnect(param);
+      delete this.model.connections[this.idx][`${this.idx}_${key}`];
     }
   }
 
-  connectOtherToParam(otherIdx, param) {
+  connectOtherToParam(otherIdx, param, key) {
     if (otherIdx >= 0) {
-      model.items[otherIdx].connector().connect(param);
+      this.model.items[otherIdx].connector().connect(param);
+      this.model.connections[this.idx][`${otherIdx}_${key}`] = param;
     }
   }
 
-  replaceOtherOnParam(oldIdx, newIdx, param) {
-    this.disconnectOtherFromParam(oldIdx, param);
-    this.connectOtherToParam(newIdx, param);
+  replaceOtherOnParam(oldIdx, newIdx, param, key) {
+    this.disconnectOtherFromParam(oldIdx, param, key);
+    this.connectOtherToParam(newIdx, param, key);
   }
 
   play(bool) {
@@ -68,7 +70,7 @@ class Node {
         return;
       }
       if (lastControls[index].type === newControls[index].type) {
-        newControls[index].set(lastControls[index].type);
+        newControls[index].set(lastControls[index].get());
       }
     }
   }
@@ -77,6 +79,14 @@ class Node {
     if (this.playing) {
       this.play(false);
     }
+  }
+
+  asOption() {
+    return {
+      value: this.idx,
+      label: this.label(),
+      type: this.type,
+    };
   }
 }
 
