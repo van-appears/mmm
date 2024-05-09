@@ -1,30 +1,27 @@
 const constants = require("./constants");
 const fillOptions = require("./fill-options");
-
-const qs = id => {
-  const nodes = document.querySelectorAll(id);
-  return nodes.length > 1 ? nodes : nodes[0];
-};
+const sequencer = require("./sequencer");
+const select = require("./select");
 
 module.exports = function connectListeners(model) {
   const { items, types, connections } = model;
   let currentIdx = null;
   let current = null;
 
-  const wrapper = qs(".wrapper");
-  const controlArea = qs(".controls");
-  const label = qs("#name");
-  const play = qs("#play");
-  const typeEl = qs("#type");
-  const controlValEls = qs(".controls .control input");
-  const controlInEls = qs(".controls .control select");
-  const convertEls = qs(".nodes button");
+  const wrapper = select(".wrapper");
+  const controlArea = select(".controls");
+  const label = select("#name");
+  const play = select("#play");
+  const typeEl = select("#type");
+  const controlValEls = select(".controls .control input");
+  const controlInEls = select(".controls .control select");
+  const convertEls = select(".nodes button");
   play.checked = false;
 
   function connect(index) {
     currentIdx = index;
     current = items[index];
-    label.innerHTML = current.label();
+    label.textContent = current.label();
     const { playing, playable } = current;
 
     let classes = "controls ";
@@ -36,24 +33,18 @@ module.exports = function connectListeners(model) {
     const subtypes = current && current.subtype().values;
     if (subtypes && subtypes.length) {
       classes += "types ";
-      typeEl.replaceChildren();
-      for (let subtype of subtypes) {
-        const option = document.createElement("option");
-        option.setAttribute("value", subtype);
-        if (subtype === current.subtype().get()) {
-          option.setAttribute("selected", true);
-        }
-        option.text = subtype;
-        typeEl.appendChild(option);
-      }
+      fillOptions(
+        typeEl,
+        current.subtype().get(),
+        subtypes.map(x => ({ value: x, label: x})));
     }
 
     const controls = current.controls();
     for (let cIndex = 0; cIndex < controls.length; cIndex++) {
       const control = controls[cIndex];
       classes += "control" + (cIndex + 1) + control.type + " ";
-      qs("label[for=control" + (cIndex + 1) + "val]").innerHTML =
-        control.label();
+      select("label[for=control" + (cIndex + 1) + "val]").textContent =
+        control.label;
 
       if (control.type === "val") {
         controlValEls[cIndex].value = control.get();
@@ -77,19 +68,19 @@ module.exports = function connectListeners(model) {
     }
   };
 
-  const options = qs(".options button");
+  const options = select(".options button");
   for (let index = 0; index < options.length; index++) {
     options[index].onclick = function () {
       connect(index);
     };
   }
 
-  const windowGraph = qs("button[value=graph]");
+  const windowGraph = select("button[value=graph]");
   windowGraph.onclick = function () {
     wrapper.className = "wrapper graph";
   }
 
-  const windowSequencer = qs("button[value=sequencer]");
+  const windowSequencer = select("button[value=sequencer]");
   windowSequencer.onclick = function () {
     wrapper.className = "wrapper sequencer";
   }

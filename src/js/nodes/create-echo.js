@@ -27,9 +27,8 @@ class Echo extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Time (ms)";
-        },
+        short: "t",
+        label: "Time (ms)",
         set(val) {
           that.delayTimeValue = val;
           that.delay.delayTime.setTargetAtTime(val, 0, 0);
@@ -40,9 +39,8 @@ class Echo extends Node {
       },
       {
         type: "val",
-        label() {
-          return "Sustain";
-        },
+        short: "s",
+        label: "Sustain",
         set(val) {
           that.gainValue = val;
           that.gain.gain.setTargetAtTime(val, 0, 0);
@@ -53,9 +51,8 @@ class Echo extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Input";
-        },
+        short: "i",
+        label: "Input",
         set(val) {
           that.replaceOtherOnParam(
             that.inputConnectValue,

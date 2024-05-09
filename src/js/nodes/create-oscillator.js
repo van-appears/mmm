@@ -6,17 +6,20 @@ class Oscillator extends Node {
     super(ctx, model, idx, constants.OSCILLATOR, true);
     this.osc = ctx.createOscillator();
     this.gain = ctx.createGain();
+    this.delay = ctx.createDelay();
     this.osc.type = "sine";
     this.osc.connect(this.gain);
+    this.gain.connect(this.delay);
     this.osc.start(0);
 
+    this.delay.delayTime.setTargetAtTime(0.001, 0, 0);
     this._controls = this.initControls();
     this._controls[0].set(100);
     this._controls[2].set(1);
   }
 
   connector() {
-    return this.gain;
+    return this.delay;
   }
 
   subtype() {
@@ -48,9 +51,8 @@ class Oscillator extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Freq";
-        },
+        short: "f",
+        label: "Freq",
         set(val) {
           that.freqValue = val;
           that.osc.frequency.setTargetAtTime(val, 0, 0);
@@ -61,9 +63,8 @@ class Oscillator extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Freq Mod";
-        },
+        short: "fm",
+        label: "Freq Mod",
         set(val) {
           that.replaceOtherOnParam(
             that.freqConnectValue,
@@ -79,9 +80,8 @@ class Oscillator extends Node {
       },
       {
         type: "val",
-        label() {
-          return "Gain";
-        },
+        short: "g",
+        label: "Gain",
         set(val) {
           that.gainValue = val;
           that.gain.gain.setTargetAtTime(val, 0, 0);
@@ -92,9 +92,8 @@ class Oscillator extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Amp Mod";
-        },
+        short: "g",
+        label: "Gain Mod",
         set(val) {
           that.replaceOtherOnParam(
             that.gainConnectValue,

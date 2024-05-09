@@ -23,9 +23,8 @@ class Delay extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Time (ms)";
-        },
+        short: "t",
+        label: "Time (ms)",
         set(val) {
           that.delayTimeValue = val;
           that.delay.delayTime.setTargetAtTime(val, 0, 0);
@@ -36,9 +35,8 @@ class Delay extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Input";
-        },
+        short: "i",
+        label: "Input",
         set(val) {
           that.replaceOtherOnParam(
             that.inputConnectValue,

@@ -18,9 +18,8 @@ class Microphone extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Gain";
-        },
+        short: "g",
+        label: "Gain",
         set(val) {
           that.gainValue = val;
           that.gain.gain.setTargetAtTime(val, 0, 0);

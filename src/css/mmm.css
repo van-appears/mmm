@@ -20,6 +20,7 @@ body {
 
 .started .controls {
   display: block;
+  text-align: left;
 }
 
 .wrapper {
@@ -133,4 +134,14 @@ a.sourceCode {
   position: relative;
   left: 136px;
   top: 2px;
+}
+
+ol {
+  font-family: monospace;
+  white-space: pre;
+}
+
+li::marker {
+  font-size: 10px;
+  color: grey;
 }

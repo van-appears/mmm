@@ -23,9 +23,8 @@ class Gain extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Gain";
-        },
+        short: "g",
+        label: "Gain",
         set(val) {
           that.gainValue = val;
           that.gain.gain.setTargetAtTime(val, 0, 0);
@@ -36,9 +35,8 @@ class Gain extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Gain Mod";
-        },
+        short: "g",
+        label: "Gain Mod",
         set(val) {
           that.replaceOtherOnParam(
             that.gainConnectValue,
@@ -54,9 +52,8 @@ class Gain extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Input";
-        },
+        short: "i",
+        label: "Input",
         set(val) {
           that.replaceOtherOnParam(
             that.inputConnectValue,

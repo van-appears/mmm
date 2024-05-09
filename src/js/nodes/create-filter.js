@@ -45,9 +45,8 @@ class Filter extends Node {
     return [
       {
         type: "val",
-        label() {
-          return "Freq";
-        },
+        short: "f",
+        label: "Freq",
         set(val) {
           that.freqValue = val;
           that.filter.frequency.setTargetAtTime(val, 0, 0);
@@ -58,9 +57,8 @@ class Filter extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Freq Mod";
-        },
+        short: "fm",
+        label: "Freq Mod",
         set(val) {
           that.replaceOtherOnParam(
             that.freqConnectValue,
@@ -76,9 +74,8 @@ class Filter extends Node {
       },
       {
         type: "val",
-        label() {
-          return "Q";
-        },
+        short: "q",
+        label: "Q",
         set(val) {
           that.qValue = val;
           that.filter.Q.setTargetAtTime(val, 0, 0);
@@ -89,9 +86,8 @@ class Filter extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Q Mod";
-        },
+        short: "qm",
+        label: "Q Mod",
         set(val) {
           that.replaceOtherOnParam(
             that.qConnectValue,
@@ -107,9 +103,8 @@ class Filter extends Node {
       },
       {
         type: "in",
-        label() {
-          return "Input";
-        },
+        short: "i",
+        label: "Input",
         set(val) {
           that.replaceOtherOnParam(
             that.inputConnectValue,
