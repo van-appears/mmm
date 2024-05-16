@@ -1,39 +1,25 @@
 const Node = require("./Node");
 const constants = require("../constants");
+const TYPES = ["lowpass", "highpass", "bandpass", "notch"];
 
 class Filter extends Node {
   constructor(ctx, model, idx) {
     super(ctx, model, idx, constants.FILTER, true);
     this.model = model;
     this.filter = ctx.createBiquadFilter();
-    this.filter.type = "lowpass";
 
     this._controls = this.initControls();
     this._controls[0].set(100);
     this._controls[2].set(0.707);
+    this._controls[4].set("lowpass");
+  }
+
+  label() {
+    return `${this.idx} ${this.type} ${this.filter.type}`;
   }
 
   connector() {
     return this.filter;
-  }
-
-  subtype() {
-    const that = this;
-    return {
-      values: ["lowpass", "highpass", "bandpass", "notch"],
-      set(val) {
-        that.filter.type = val;
-      },
-      get() {
-        return that.filter.type;
-      }
-    };
-  }
-
-  destroy() {
-    super.destroy();
-    this.disconnectOtherFromParam(this.freqConnectValue, this.filter.frequency);
-    this.disconnectOtherFromParam(this.qConnectValue, this.filter.Q);
   }
 
   controls() {
@@ -102,6 +88,21 @@ class Filter extends Node {
         }
       },
       {
+        type: "type",
+        short: "t",
+        label: "Type",
+        values: TYPES,
+        set(val) {
+          if (!TYPES.includes(val)) {
+            return;
+          }
+          that.filter.type = val;
+        },
+        get() {
+          return that.filter.type;
+        }
+      },
+      {
         type: "in",
         short: "i",
         label: "Input",
@@ -119,6 +120,13 @@ class Filter extends Node {
         }
       }
     ];
+  }
+
+  destroy() {
+    super.destroy();
+    this.disconnectOtherFromParam(this.freqConnectValue, this.filter.frequency);
+    this.disconnectOtherFromParam(this.qConnectValue, this.filter.Q);
+    this.disconnectOtherFromParam(this.inputConnectValue, this.filter);
   }
 }
 

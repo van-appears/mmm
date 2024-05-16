@@ -1,5 +1,6 @@
 const Node = require("./Node");
 const constants = require("../constants");
+const TYPES = ["sawtooth", "sine", "square", "triangle"];
 
 class Oscillator extends Node {
   constructor(ctx, model, idx) {
@@ -7,7 +8,6 @@ class Oscillator extends Node {
     this.osc = ctx.createOscillator();
     this.gain = ctx.createGain();
     this.delay = ctx.createDelay();
-    this.osc.type = "sine";
     this.osc.connect(this.gain);
     this.gain.connect(this.delay);
     this.osc.start(0);
@@ -16,6 +16,13 @@ class Oscillator extends Node {
     this._controls = this.initControls();
     this._controls[0].set(100);
     this._controls[2].set(1);
+    this._controls[4].set("sine");
+
+    console.log(ctx);
+  }
+
+  label() {
+    return `${this.idx} ${this.type} ${this.osc.type}`;
   }
 
   connector() {
@@ -25,7 +32,7 @@ class Oscillator extends Node {
   subtype() {
     const that = this;
     return {
-      values: ["sawtooth", "sine", "square", "triangle"],
+      values: [],
       set(val) {
         that.osc.type = val;
       },
@@ -105,6 +112,21 @@ class Oscillator extends Node {
         },
         get() {
           return that.gainConnectValue;
+        }
+      },
+      {
+        type: "type",
+        short: "t",
+        label: "Type",
+        values: TYPES,
+        set(val) {
+          if (!TYPES.includes(val)) {
+            return;
+          }
+          that.osc.type = val;
+        },
+        get() {
+          return that.osc.type;
         }
       }
     ];

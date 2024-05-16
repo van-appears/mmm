@@ -5,5 +5,6 @@ module.exports = {
   FILTER: "filter",
   GAIN: "gain",
   MICROPHONE: "microphone",
-  OSCILLATOR: "oscillator"
+  OSCILLATOR: "oscillator",
+  FALLBACK_DELAY: 1000
 };

@@ -1,10 +1,11 @@
 const constants = require("./constants");
 const fillOptions = require("./fill-options");
-const sequencer = require("./sequencer");
+const sequencerFactory = require("./sequencer");
 const select = require("./select");
 
 module.exports = function connectListeners(model) {
   const { items, types, connections } = model;
+  const sequencer = sequencerFactory(model);
   let currentIdx = null;
   let current = null;
 
@@ -12,7 +13,6 @@ module.exports = function connectListeners(model) {
   const controlArea = select(".controls");
   const label = select("#name");
   const play = select("#play");
-  const typeEl = select("#type");
   const controlValEls = select(".controls .control input");
   const controlInEls = select(".controls .control select");
   const convertEls = select(".nodes button");
@@ -30,15 +30,6 @@ module.exports = function connectListeners(model) {
       play.checked = playing;
     }
 
-    const subtypes = current && current.subtype().values;
-    if (subtypes && subtypes.length) {
-      classes += "types ";
-      fillOptions(
-        typeEl,
-        current.subtype().get(),
-        subtypes.map(x => ({ value: x, label: x})));
-    }
-
     const controls = current.controls();
     for (let cIndex = 0; cIndex < controls.length; cIndex++) {
       const control = controls[cIndex];
@@ -48,7 +39,8 @@ module.exports = function connectListeners(model) {
 
       if (control.type === "val") {
         controlValEls[cIndex].value = control.get();
-      } else {
+      } else if (control.type === "in") {
+        console.log(control);
         fillOptions(
           controlInEls[cIndex],
           control.get(),
@@ -56,17 +48,21 @@ module.exports = function connectListeners(model) {
             .map(x => x.asOption())
             .filter(x => x.value !== index && x.type !== constants.EMPTY),
           true);
+      } else if (control.type === "type") {
+        fillOptions(
+          controlInEls[cIndex],
+          control.get(),
+          control.values.map(x => ({value: x,label: x})));
       }
     }
 
     controlArea.className = classes;
   }
 
-  typeEl.onchange = function (evt) {
-    if (current) {
-      current.subtype().set(evt.target.value);
-    }
-  };
+  const sequencerControl = select("#sequencerControl");
+  sequencerControl.onclick = function () {
+    sequencer.toggle();
+  }
 
   const options = select(".options button");
   for (let index = 0; index < options.length; index++) {
@@ -96,6 +92,7 @@ module.exports = function connectListeners(model) {
     controlValEls[index].onchange = function (evt) {
       if (current) {
         current.controls()[index].set(evt.target.value);
+        label.textContent = current.label();
       }
     };
   }

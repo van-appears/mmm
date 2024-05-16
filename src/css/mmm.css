@@ -56,53 +56,75 @@ body {
   display: block;
 }
 .controls.control1in .control:nth-child(3),
-.controls.control1val .control:nth-child(3) {
+.controls.control1val .control:nth-child(3),
+.controls.control1type .control:nth-child(3) {
   display: block;
 }
-.controls.control1in #control1in {
+.controls.control1in #control1in,
+.controls.control1type #control1in {
   display: inline;
 }
 .controls.control1val #control1val {
   display: inline;
 }
 .controls.control2in .control:nth-child(4),
-.controls.control2val .control:nth-child(4) {
+.controls.control2val .control:nth-child(4),
+.controls.control2type .control:nth-child(4) {
   display: block;
 }
-.controls.control2in #control2in {
+.controls.control2in #control2in,
+.controls.control2type #control2in {
   display: inline;
 }
 .controls.control2val #control2val {
   display: inline;
 }
 .controls.control3in .control:nth-child(5),
-.controls.control3val .control:nth-child(5) {
+.controls.control3val .control:nth-child(5),
+.controls.control3type .control:nth-child(5) {
   display: block;
 }
-.controls.control3in #control3in {
+.controls.control3in #control3in,
+.controls.control3type #control3in {
   display: inline;
 }
 .controls.control3val #control3val {
   display: inline;
 }
 .controls.control4in .control:nth-child(6),
-.controls.control4val .control:nth-child(6) {
+.controls.control4val .control:nth-child(6),
+.controls.control4type .control:nth-child(6) {
   display: block;
 }
-.controls.control4in #control4in {
+.controls.control4in #control4in,
+.controls.control4type #control4in {
   display: inline;
 }
 .controls.control4val #control4val {
   display: inline;
 }
 .controls.control5in .control:nth-child(7),
-.controls.control5val .control:nth-child(7) {
+.controls.control5val .control:nth-child(7),
+.controls.control5type .control:nth-child(7) {
   display: block;
 }
-.controls.control5in #control5in {
+.controls.control5in #control5in,
+.controls.control5type #control5in {
   display: inline;
 }
 .controls.control5val #control5val {
+  display: inline;
+}
+.controls.control6in .control:nth-child(8),
+.controls.control6val .control:nth-child(8),
+.controls.control6type .control:nth-child(8) {
+  display: block;
+}
+.controls.control6in #control6in,
+.controls.control6type #control6in {
+  display: inline;
+}
+.controls.control6val #control6val {
   display: inline;
 }
 

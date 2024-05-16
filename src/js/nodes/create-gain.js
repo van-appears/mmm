@@ -58,7 +58,7 @@ class Gain extends Node {
           that.replaceOtherOnParam(
             that.inputConnectValue,
             val,
-            that.delay,
+            that.gain,
             "input"
           );
           that.inputConnectValue = val;
@@ -68,6 +68,11 @@ class Gain extends Node {
         }
       }
     ];
+  }
+
+  destroy() {
+    super.destroy();
+    this.disconnectOtherFromParam(this.inputConnectValue, this.gain);
   }
 }
 

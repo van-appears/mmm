@@ -44,18 +44,8 @@ class Node {
     }
   }
 
-  subtype() {
-    return {
-      values: null,
-      set(val) {},
-      get() {
-        return "";
-      }
-    };
-  }
-
   label() {
-    return `${this.idx} ${this.type} ${this.subtype().get()}`;
+    return `${this.idx} ${this.type}`;
   }
 
   controls() {

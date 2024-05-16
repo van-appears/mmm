@@ -52,6 +52,11 @@ class Delay extends Node {
       }
     ];
   }
+
+  destroy() {
+    super.destroy();
+    this.disconnectOtherFromParam(this.inputConnectValue, this.delay);
+  }
 }
 
 module.exports = function (ctx, model) {
