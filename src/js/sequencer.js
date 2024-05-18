@@ -4,7 +4,7 @@ const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
 
-module.exports = function(model) {
+module.exports = function (model) {
   const linesEl = select("#sequence");
   const delay = select("#delay");
   let lineNum = 0;
@@ -59,9 +59,10 @@ module.exports = function(model) {
           const waitCommand = waitSplitter.exec(piece.trim());
           if (waitCommand) {
             const [, duration, optUnit] = waitCommand;
-            const delay = optUnit === "ms"
-              ? Math.floor(duration)
-              : Math.floor(duration * 1000);
+            const delay =
+              optUnit === "ms"
+                ? Math.floor(duration)
+                : Math.floor(duration * 1000);
 
             lineNum++;
             timeoutId = setTimeout(processLine, delay);
@@ -78,7 +79,7 @@ module.exports = function(model) {
   }
 
   return {
-    toggle () {
+    toggle() {
       running = !running;
       if (running) {
         timeoutId = setTimeout(processLine, parseDelay());
@@ -87,4 +88,4 @@ module.exports = function(model) {
       }
     }
   };
-}
+};

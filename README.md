@@ -15,10 +15,11 @@ npm run build
 
 
 TODO
-- sequencer
+- multiple sequencers
 - colours to differentiate controls
 - something to show nodes that are playing
 - confirmation to change node type
 - select graph and node 1 by default
 - looper
-- move type into controls
+- layout
+- import / export

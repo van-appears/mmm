@@ -75,7 +75,7 @@ class Node {
     return {
       value: this.idx,
       label: this.label(),
-      type: this.type,
+      type: this.type
     };
   }
 }

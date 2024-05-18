@@ -17,8 +17,6 @@ class Oscillator extends Node {
     this._controls[0].set(100);
     this._controls[2].set(1);
     this._controls[4].set("sine");
-
-    console.log(ctx);
   }
 
   label() {

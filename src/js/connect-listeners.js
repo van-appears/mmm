@@ -1,5 +1,5 @@
 const constants = require("./constants");
-const fillOptions = require("./fill-options");
+const fillSelect = require("./fill-select");
 const sequencerFactory = require("./sequencer");
 const select = require("./select");
 
@@ -16,7 +16,14 @@ module.exports = function connectListeners(model) {
   const controlValEls = select(".controls .control input");
   const controlInEls = select(".controls .control select");
   const convertEls = select(".nodes button");
+  const optionEls = select(".options button");
   play.checked = false;
+
+  function setOptionStyle() {
+    const style = items[currentIdx].type + (items[currentIdx].playing ? " playing" : "");
+    optionEls[currentIdx].className = style;
+    optionEls[currentIdx].setAttribute("title", style);
+  }
 
   function connect(index) {
     currentIdx = index;
@@ -40,19 +47,20 @@ module.exports = function connectListeners(model) {
       if (control.type === "val") {
         controlValEls[cIndex].value = control.get();
       } else if (control.type === "in") {
-        console.log(control);
-        fillOptions(
+        fillSelect(
           controlInEls[cIndex],
           control.get(),
           items
             .map(x => x.asOption())
             .filter(x => x.value !== index && x.type !== constants.EMPTY),
-          true);
+          true
+        );
       } else if (control.type === "type") {
-        fillOptions(
+        fillSelect(
           controlInEls[cIndex],
           control.get(),
-          control.values.map(x => ({value: x,label: x})));
+          control.values.map(x => ({ value: x, label: x }))
+        );
       }
     }
 
@@ -62,11 +70,10 @@ module.exports = function connectListeners(model) {
   const sequencerControl = select("#sequencerControl");
   sequencerControl.onclick = function () {
     sequencer.toggle();
-  }
+  };
 
-  const options = select(".options button");
-  for (let index = 0; index < options.length; index++) {
-    options[index].onclick = function () {
+  for (let index = 0; index < optionEls.length; index++) {
+    optionEls[index].onclick = function () {
       connect(index);
     };
   }
@@ -74,16 +81,17 @@ module.exports = function connectListeners(model) {
   const windowGraph = select("button[value=graph]");
   windowGraph.onclick = function () {
     wrapper.className = "wrapper graph";
-  }
+  };
 
   const windowSequencer = select("button[value=sequencer]");
   windowSequencer.onclick = function () {
     wrapper.className = "wrapper sequencer";
-  }
+  };
 
   play.onclick = function (evt) {
     if (current) {
       current.play(evt.target.checked);
+      setOptionStyle();
     }
   };
 
@@ -100,7 +108,8 @@ module.exports = function connectListeners(model) {
   for (let index = 0; index < controlInEls.length; index++) {
     controlInEls[index].onchange = function (evt) {
       if (current) {
-        current.controls()[index].set(parseInt(evt.target.value));
+        const val = evt.target.value;
+        current.controls()[index].set(parseInt(val) || val);
       }
     };
   }
@@ -110,8 +119,11 @@ module.exports = function connectListeners(model) {
       if (current) {
         const lastControl = items[currentIdx];
         const newControl = types[evt.target.value](currentIdx);
-        lastControl.setValuesTo(newControl);
+        if (newControl === lastControl) {
+          return;
+        }
 
+        lastControl.setValuesTo(newControl);
         const currentConnections = model.connections[currentIdx];
         Object.keys(currentConnections).forEach(key => {
           lastControl.connector().connect(currentConnections[key]);
@@ -121,6 +133,7 @@ module.exports = function connectListeners(model) {
         lastControl.destroy();
         items[currentIdx] = newControl;
         connect(currentIdx);
+        setOptionStyle();
       }
     };
   }

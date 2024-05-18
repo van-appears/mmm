@@ -1,13 +1,19 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const isDevelopment = process.env.NODE_ENV !== 'production';
+
+// from https://stackoverflow.com/a/76904811
+const crypto = require("crypto");
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
 
 module.exports = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: process.env.NODE_ENV || 'production',
+  target: 'web',
   entry: {
     app: './src/index.js',
   },
   output: {
+    hashFunction: 'sha256',
     filename: '[name].[hash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
@@ -20,13 +26,11 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        loader: 'babel-loader'
       },
       {
         test: /\.html$/,
-        use: {
-          loader: 'html-loader'
-        }
+        loader: 'html-loader'
       },
       {
         test: /\.css$/,
