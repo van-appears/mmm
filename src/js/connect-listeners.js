@@ -13,6 +13,8 @@ module.exports = function connectListeners(model) {
   const controlArea = select(".controls");
   const label = select("#name");
   const play = select("#play");
+  const controlShortEls = select(".controls .control .short");
+  const controlLongEls = select(".controls .control .long");
   const controlValEls = select(".controls .control input");
   const controlInEls = select(".controls .control select");
   const convertEls = select(".nodes button");
@@ -41,8 +43,8 @@ module.exports = function connectListeners(model) {
     for (let cIndex = 0; cIndex < controls.length; cIndex++) {
       const control = controls[cIndex];
       classes += "control" + (cIndex + 1) + control.type + " ";
-      select("label[for=control" + (cIndex + 1) + "val]").textContent =
-        control.label;
+      controlShortEls[cIndex].textContent = `(${control.short})`;
+      controlLongEls[cIndex].textContent = control.label;
 
       if (control.type === "val") {
         controlValEls[cIndex].value = control.get();
