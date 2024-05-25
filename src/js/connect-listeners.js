@@ -5,12 +5,15 @@ const select = require("./select");
 
 module.exports = function connectListeners(model) {
   const { items, types, connections } = model;
-  const sequencer = sequencerFactory(model);
+  sequencerFactory(model);
   let currentIdx = null;
   let current = null;
+  let nextType = null;
+  let lastControl = null;
 
   const wrapper = select(".wrapper");
   const controlArea = select(".controls");
+  const confirmEl = select(".confirm");
   const label = select("#name");
   const play = select("#play");
   const controlShortEls = select(".controls .control .short");
@@ -69,11 +72,6 @@ module.exports = function connectListeners(model) {
     controlArea.className = classes;
   }
 
-  const sequencerControl = select("#sequencerControl");
-  sequencerControl.onclick = function () {
-    sequencer.toggle();
-  };
-
   for (let index = 0; index < optionEls.length; index++) {
     optionEls[index].onclick = function () {
       connect(index);
@@ -116,27 +114,48 @@ module.exports = function connectListeners(model) {
     };
   }
 
+  function convert() {
+    const newControl = types[nextType](currentIdx);
+    lastControl.setValuesTo(newControl);
+    const currentConnections = model.connections[currentIdx];
+    Object.keys(currentConnections).forEach(key => {
+      lastControl.connector().connect(currentConnections[key]);
+      newControl.connector().connect(currentConnections[key]);
+    });
+
+    lastControl.destroy();
+    items[currentIdx] = newControl;
+    connect(currentIdx);
+    setOptionStyle();
+  }
+
   for (let index = 0; index < convertEls.length; index++) {
     convertEls[index].onclick = function (evt) {
       if (current) {
-        const lastControl = items[currentIdx];
-        const newControl = types[evt.target.value](currentIdx);
-        if (newControl === lastControl) {
+        nextType = evt.target.value;
+        lastControl = items[currentIdx];
+        if (lastControl.type === types[nextType] ||
+          lastControl.type === constants.MICROPHONE) {
           return;
         }
-
-        lastControl.setValuesTo(newControl);
-        const currentConnections = model.connections[currentIdx];
-        Object.keys(currentConnections).forEach(key => {
-          lastControl.connector().connect(currentConnections[key]);
-          newControl.connector().connect(currentConnections[key]);
-        });
-
-        lastControl.destroy();
-        items[currentIdx] = newControl;
-        connect(currentIdx);
-        setOptionStyle();
+        if (lastControl.type === constants.EMPTY) {
+          convert();
+        } else {
+          controlArea.className = "controls hide";
+          confirmEl.className = "confirm";
+        }
       }
     };
+  }
+
+  select("button[value=change").onclick = function (evt) {
+    controlArea.className = "controls";
+    confirmEl.className = "confirm hide";
+    convert();
+  }
+
+  select("button[value=cancel").onclick = function (evt) {
+    controlArea.className = "controls";
+    confirmEl.className = "confirm hide";
   }
 };

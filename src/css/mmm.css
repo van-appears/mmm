@@ -55,6 +55,10 @@ button.playing {
   font-weight: 700;
 }
 
+.hide {
+  display: none;
+}
+
 .graph > div {
   margin-bottom: 8px;
 }

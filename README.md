@@ -15,11 +15,12 @@ npm run build
 
 
 TODO
+- select graph and node 0 by default
+- import / export
+
+- time change
 - multiple sequencers
-- colours to differentiate controls
-- something to show nodes that are playing
-- confirmation to change node type
-- select graph and node 1 by default
 - looper
 - layout
-- import / export
+- source/home icons
+- get rid of 'label' - better selection visual

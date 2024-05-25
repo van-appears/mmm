@@ -133,10 +133,6 @@ class Oscillator extends Node {
 
 module.exports = function (ctx, model) {
   return function (idx) {
-    const last = model.items[idx];
-    if ([constants.OSCILLATOR, constants.MICROPHONE].includes(last.type)) {
-      return last;
-    }
     return new Oscillator(ctx, model, idx);
   };
 };

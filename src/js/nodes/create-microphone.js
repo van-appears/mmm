@@ -3,17 +3,20 @@ const constants = require("../constants");
 
 class Microphone extends Node {
   constructor(ctx, model, idx, stream) {
-    super(ctx, model, idx, constants.MICROPHONE, false);
+    super(ctx, model, idx, constants.MICROPHONE, true);
     this.input = ctx.createMediaStreamSource(stream);
     this.gain = ctx.createGain();
     this.input.connect(this.gain);
+
+    this._controls = this.initControls();
+    this._controls[0].set(1);
   }
 
   connector() {
     return this.gain;
   }
 
-  controls() {
+  initControls() {
     const that = this;
     return [
       {
@@ -29,6 +32,10 @@ class Microphone extends Node {
         }
       }
     ];
+  }
+
+  controls() {
+    return this._controls;
   }
 
   destroy() {

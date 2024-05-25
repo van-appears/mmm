@@ -16,7 +16,7 @@ module.exports = function (selectEl, currentVal, items, includeEmpty) {
     const option = document.createElement("option");
     option.setAttribute("value", value);
     option.text = label;
-    if (currentVal === value) {
+    if (String(currentVal) === String(value)) {
       option.setAttribute("selected", true);
     }
     selectEl.appendChild(option);

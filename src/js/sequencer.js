@@ -5,8 +5,11 @@ const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
 
 module.exports = function (model) {
+  const sequencerEl = select(".sequencer");
+  const sequencerControlEl = select("#sequencerControl");
   const linesEl = select("#sequence");
   const delay = select("#delay");
+
   let lineNum = 0;
   let timeoutId = null;
   let running = false;
@@ -78,14 +81,18 @@ module.exports = function (model) {
     }
   }
 
-  return {
-    toggle() {
-      running = !running;
-      if (running) {
-        timeoutId = setTimeout(processLine, parseDelay());
-      } else {
-        clearTimeout(timeoutId);
-      }
+  function toggle() {
+    running = !running;
+    if (running) {
+      sequencerEl.className = "sequencer running";
+      sequencerControlEl.textContent = "Stop";
+      timeoutId = setTimeout(processLine, parseDelay());
+    } else {
+      sequencerEl.className = "sequencer";
+      sequencerControlEl.textContent = "Start";
+      clearTimeout(timeoutId);
     }
-  };
+  }
+
+  sequencerControlEl.onclick = toggle;
 };

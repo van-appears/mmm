@@ -132,10 +132,6 @@ class Filter extends Node {
 
 module.exports = function (ctx, model) {
   return function (idx) {
-    const last = model.items[idx];
-    if ([constants.FILTER, constants.MICROPHONE].includes(last.type)) {
-      return last;
-    }
     return new Filter(ctx, model, idx);
   };
 };

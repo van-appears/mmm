@@ -77,10 +77,6 @@ class Echo extends Node {
 
 module.exports = function (ctx, model) {
   return function (idx) {
-    const last = model.items[idx];
-    if ([constants.ECHO, constants.MICROPHONE].includes(last.type)) {
-      return last;
-    }
     return new Echo(ctx, model, idx);
   };
 };

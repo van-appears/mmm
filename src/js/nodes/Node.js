@@ -65,6 +65,10 @@ class Node {
     }
   }
 
+  describe() {
+    return this.controls().map(x => `${idx} ${x.short} ${x.get()}`);
+  }
+
   destroy() {
     if (this.playing) {
       this.play(false);
