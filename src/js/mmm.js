@@ -1,6 +1,8 @@
 const connectAudio = require("./connect-audio");
-const connectListeners = require("./connect-listeners");
 const createModel = require("./create-model");
+const connectWindowListeners = require("./connect-window-listeners");
+const connectGraphListeners = require("./connect-graph-listeners");
+const connectSequencerListeners = require("./connect-sequencer-listeners");
 
 window.onload = function () {
   connectAudio(function (err, audio) {
@@ -11,7 +13,9 @@ window.onload = function () {
     } else {
       document.body.className = "started";
       const model = createModel(audio);
-      connectListeners(model);
+      connectWindowListeners(model);
+      connectGraphListeners(model);
+      connectSequencerListeners(model);
     }
   });
 };

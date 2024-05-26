@@ -4,7 +4,7 @@ const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
 
-module.exports = function (model) {
+module.exports = function connectSequencerListeners(model) {
   const sequencerEl = select(".sequencer");
   const sequencerControlEl = select("#sequencerControl");
   const linesEl = select("#sequence");

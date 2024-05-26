@@ -4,7 +4,7 @@ const constants = require("../constants");
 class Delay extends Node {
   constructor(ctx, model, idx) {
     super(ctx, model, idx, constants.DELAY, true);
-    this.delay = ctx.createDelay();
+    this.delay = ctx.createDelay(constants.MAX_DELAY_SECONDS);
 
     this._controls = this.initControls();
     this._controls[0].set(1000);
@@ -25,6 +25,7 @@ class Delay extends Node {
         type: "val",
         short: "t",
         label: "Time (ms)",
+        max: constants.MAX_DELAY_SECONDS,
         set(val) {
           that.delayTimeValue = val;
           that.delay.delayTime.setTargetAtTime(val, 0, 0);

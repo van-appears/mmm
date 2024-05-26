@@ -6,5 +6,6 @@ module.exports = {
   GAIN: "gain",
   MICROPHONE: "microphone",
   OSCILLATOR: "oscillator",
-  FALLBACK_DELAY: 1000
+  FALLBACK_DELAY: 1000, // 1 second
+  MAX_DELAY_SECONDS: 10
 };

@@ -1,20 +1,17 @@
 const constants = require("./constants");
 const fillSelect = require("./fill-select");
-const sequencerFactory = require("./sequencer");
 const select = require("./select");
 
-module.exports = function connectListeners(model) {
+module.exports = function connectGraphListeners(model) {
   const { items, types, connections } = model;
-  sequencerFactory(model);
-  let currentIdx = null;
+  let currentIdx = 0;
   let current = null;
   let nextType = null;
   let lastControl = null;
 
-  const wrapper = select(".wrapper");
   const controlArea = select(".controls");
   const confirmEl = select(".confirm");
-  const label = select("#name");
+  const label = select(".name span");
   const play = select("#play");
   const controlShortEls = select(".controls .control .short");
   const controlLongEls = select(".controls .control .long");
@@ -24,10 +21,12 @@ module.exports = function connectListeners(model) {
   const optionEls = select(".options button");
   play.checked = false;
 
-  function setOptionStyle() {
-    const style = items[currentIdx].type + (items[currentIdx].playing ? " playing" : "");
-    optionEls[currentIdx].className = style;
-    optionEls[currentIdx].setAttribute("title", style);
+  function setOptionStyle(idx) {
+    const style = items[idx].type +
+      (items[idx].playing ? " playing" : "") +
+      (idx === currentIdx ? " selected" : "");
+    optionEls[idx].className = style;
+    optionEls[idx].setAttribute("title", style);
   }
 
   function connect(index) {
@@ -36,7 +35,7 @@ module.exports = function connectListeners(model) {
     label.textContent = current.label();
     const { playing, playable } = current;
 
-    let classes = "controls ";
+    let classes = "controls " + current.type + " ";
     if (playable) {
       classes += "playable ";
       play.checked = playing;
@@ -74,24 +73,17 @@ module.exports = function connectListeners(model) {
 
   for (let index = 0; index < optionEls.length; index++) {
     optionEls[index].onclick = function () {
+      const lastIdx = currentIdx;
       connect(index);
+      setOptionStyle(lastIdx);
+      setOptionStyle(index);
     };
   }
-
-  const windowGraph = select("button[value=graph]");
-  windowGraph.onclick = function () {
-    wrapper.className = "wrapper graph";
-  };
-
-  const windowSequencer = select("button[value=sequencer]");
-  windowSequencer.onclick = function () {
-    wrapper.className = "wrapper sequencer";
-  };
 
   play.onclick = function (evt) {
     if (current) {
       current.play(evt.target.checked);
-      setOptionStyle();
+      setOptionStyle(currentIdx);
     }
   };
 
@@ -110,6 +102,7 @@ module.exports = function connectListeners(model) {
       if (current) {
         const val = evt.target.value;
         current.controls()[index].set(parseInt(val) || val);
+        label.textContent = current.label();
       }
     };
   }
@@ -126,7 +119,7 @@ module.exports = function connectListeners(model) {
     lastControl.destroy();
     items[currentIdx] = newControl;
     connect(currentIdx);
-    setOptionStyle();
+    setOptionStyle(currentIdx);
   }
 
   for (let index = 0; index < convertEls.length; index++) {
@@ -158,4 +151,6 @@ module.exports = function connectListeners(model) {
     controlArea.className = "controls";
     confirmEl.className = "confirm hide";
   }
+
+  optionEls[0].click();
 };

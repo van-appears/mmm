@@ -15,12 +15,14 @@ npm run build
 
 
 TODO
-- select graph and node 0 by default
 - import / export
+- source/home icons
+- disable graphs in destroy
+- too much space at top
+- max delay
 
-- time change
+- time change for val
 - multiple sequencers
 - looper
 - layout
-- source/home icons
-- get rid of 'label' - better selection visual
+- move 'label'

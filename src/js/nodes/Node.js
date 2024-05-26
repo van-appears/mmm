@@ -16,14 +16,14 @@ class Node {
   }
 
   disconnectOtherFromParam(otherIdx, param, key) {
-    if (otherIdx >= 0) {
+    if (typeof otherIdx === "number") {
       this.model.items[otherIdx].connector().disconnect(param);
       delete this.model.connections[this.idx][`${this.idx}_${key}`];
     }
   }
 
   connectOtherToParam(otherIdx, param, key) {
-    if (otherIdx >= 0) {
+    if (typeof otherIdx === "number") {
       this.model.items[otherIdx].connector().connect(param);
       this.model.connections[this.idx][`${otherIdx}_${key}`] = param;
     }
