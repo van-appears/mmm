@@ -6,6 +6,11 @@ module.exports = function (model) {
       return;
     }
 
+    if (short === "control" && idx > 0) {
+      items[idx] = model.types[value](idx);
+      return;
+    }
+
     const controls = items[idx].controls() || [];
     const control = controls.find(x => x.short === short) || {};
 

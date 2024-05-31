@@ -1,7 +1,7 @@
 const select = require("./select");
 const applyCommand = require("./apply-command");
 const initialiseNodes = require("./initialise-nodes");
-const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *(.*)$/;
+const commandSplitter = /^([0-9]{1}) *([a-zA-Z]*) *(.*)$/;
 
 module.exports = function connectExportListeners(model) {
   const executeCommand = applyCommand(model);

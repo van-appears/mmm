@@ -66,9 +66,14 @@ class Node {
   }
 
   describe() {
-    return this.controls()
+    const lines = [];
+    if (this.idx > 0 && this.type !== "empty") {
+      lines.push(`${this.idx} control ${this.type}`);
+    }
+    this.controls()
       .filter(x => x.get() !== undefined && x.get() !== "")
-      .map(x => `${this.idx} ${x.short} ${x.get()}`);
+      .forEach(x => lines.push(`${this.idx} ${x.short} ${x.get()}`));
+    return lines;
   }
 
   destroy() {
