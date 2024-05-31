@@ -1,35 +1,44 @@
-const constants = require("./constants");
-const createMicrophone = require("./nodes/create-microphone");
 const createOscillator = require("./nodes/create-oscillator");
 const createFilter = require("./nodes/create-filter");
 const createDelay = require("./nodes/create-delay");
 const createEcho = require("./nodes/create-echo");
 const createGain = require("./nodes/create-gain");
-const Node = require("./nodes/Node");
 
-module.exports = function createModel(stream) {
+module.exports = function createModel() {
+  const callbacks = [];
+  const dispatch = (obj, prop, val) => {
+    callbacks.forEach(callback => callback(obj, prop, val));
+  };
+  const handler = {
+    set(obj, prop, val) {
+      obj[prop] = val;
+      dispatch(obj, prop, val);
+      return true;
+    }
+  };
+
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const items = new Array(10);
+  const items = new Proxy(new Array(10), handler);
   const connections = new Array(10).fill(0).map(x => ({}));
   const types = {};
   const model = {
+    audioCtx,
     items,
     types,
-    connections
+    connections,
+    dispatch,
+    register(callback) {
+      callbacks.push(callback);
+    }
   };
+
   types.oscillator = createOscillator(audioCtx, model);
   types.filter = createFilter(audioCtx, model);
   types.delay = createDelay(audioCtx, model);
   types.echo = createEcho(audioCtx, model);
   types.gain = createGain(audioCtx, model);
 
-  items[0] = createMicrophone(audioCtx, model, 0, stream);
-  for (let index = 1; index < 10; index++) {
-    items[index] = new Node(audioCtx, model, index, constants.EMPTY, false);
-  }
-
   // for diagnostics
   window.model = model;
-
   return model;
 };

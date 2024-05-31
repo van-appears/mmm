@@ -1,10 +1,12 @@
 const select = require("./select");
+const applyCommand = require("./apply-command");
 const { FALLBACK_DELAY } = require("./constants");
 const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
 
 module.exports = function connectSequencerListeners(model) {
+  const executeCommand = applyCommand(model);
   const sequencerEl = select(".sequencer");
   const sequencerControlEl = select("#sequencerControl");
   const linesEl = select("#sequence");
@@ -14,28 +16,6 @@ module.exports = function connectSequencerListeners(model) {
   let timeoutId = null;
   let running = false;
   let lastIdx = -1;
-
-  function executeCommand(idx, key, value) {
-    if (idx < 0) {
-      return;
-    }
-
-    const controls = model.items[idx].controls() || [];
-    const control = controls.find(x => x.short === key) || {};
-    if (control.type === "val") {
-      const parsed = parseFloat(value);
-      if (parsed) {
-        control.set(parsed);
-      }
-    } else if (control.type === "in") {
-      const parsed = parseInt(value);
-      if (parsed && idx !== parsed) {
-        control.set(parsed);
-      }
-    } else if (control.type === "type") {
-      control.set(value);
-    }
-  }
 
   function parseDelay() {
     return parseFloat(delay) || FALLBACK_DELAY;

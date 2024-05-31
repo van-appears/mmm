@@ -66,7 +66,9 @@ class Node {
   }
 
   describe() {
-    return this.controls().map(x => `${idx} ${x.short} ${x.get()}`);
+    return this.controls()
+      .filter(x => x.get() !== undefined && x.get() !== "")
+      .map(x => `${this.idx} ${x.short} ${x.get()}`);
   }
 
   destroy() {

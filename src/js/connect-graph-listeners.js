@@ -22,7 +22,8 @@ module.exports = function connectGraphListeners(model) {
   play.checked = false;
 
   function setOptionStyle(idx) {
-    const style = items[idx].type +
+    const style =
+      items[idx].type +
       (items[idx].playing ? " playing" : "") +
       (idx === currentIdx ? " selected" : "");
     optionEls[idx].className = style;
@@ -127,8 +128,10 @@ module.exports = function connectGraphListeners(model) {
       if (current) {
         nextType = evt.target.value;
         lastControl = items[currentIdx];
-        if (lastControl.type === types[nextType] ||
-          lastControl.type === constants.MICROPHONE) {
+        if (
+          lastControl.type === types[nextType] ||
+          lastControl.type === constants.MICROPHONE
+        ) {
           return;
         }
         if (lastControl.type === constants.EMPTY) {
@@ -145,12 +148,18 @@ module.exports = function connectGraphListeners(model) {
     controlArea.className = "controls";
     confirmEl.className = "confirm hide";
     convert();
-  }
+  };
 
   select("button[value=cancel").onclick = function (evt) {
     controlArea.className = "controls";
     confirmEl.className = "confirm hide";
-  }
+  };
 
-  optionEls[0].click();
+  model.register((obj, prop, value) => {
+    if (Array.isArray(obj)) {
+      setOptionStyle(prop);
+    } else if (prop === "currentIdx") {
+      connect(value);
+    }
+  });
 };
