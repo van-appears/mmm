@@ -7,13 +7,16 @@ const connectExportListeners = require("./connect-export-listeners");
 const initialiseNodes = require("./initialise-nodes");
 
 window.onload = function () {
+  const wrapper = document.querySelector(".wrapper");
   connectAudio(function (err, audio) {
-    if (err) {
-      //document.querySelector(".info").innerHTML =
-      //  "Failed to connect to audio: " + err.message;
+    if (!err) {
+      wrapper.innerHTML = "Failed to connect audio";
+      wrapper.style = "";
       console.log(err);
     } else {
       document.body.className = "started";
+      wrapper.style = "";
+
       const model = createModel();
       connectWindowListeners(model);
       connectGraphListeners(model);

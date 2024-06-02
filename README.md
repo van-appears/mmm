@@ -15,14 +15,14 @@ npm run build
 
 
 TODO
-- import / export
-- source/home icons
+- import / export - add sequencer
+- allow 0 configurable if not permission
 - disable graphs in destroy
-- too much space at top
-- max delay
 
+- max delay
 - time change for val
+
 - multiple sequencers
 - looper
 - layout
-- move 'label'
+- internal saves

@@ -13,15 +13,15 @@ body {
   text-align: center;
 }
 
+div {
+  margin-bottom: 8px;
+}
+
 button {
   background: transparent;
   background-color: transparent;
   border: 1px solid gray;
   padding: 4px;
-}
-
-.options button {
-  width: 24px;
 }
 
 button.microphone {
@@ -66,13 +66,53 @@ button.selected {
   font-weight: 700;
 }
 
-.hide {
-  display: none;
+textarea {
+  width: 280px;
+  height: 200px;
 }
 
-.windows,
-.graph > div {
-  margin-bottom: 8px;
+ol {
+  font-family: monospace;
+  white-space: pre;
+}
+
+li::marker {
+  font-size: 10px;
+  color: grey;
+}
+
+a.home,
+a.sourceCode {
+  display: inline-block;
+  cursor: pointer;
+  outline: 0;
+  width: 32px;
+  height: 32px;
+  text-indent: -99999px;
+  background-image: url(../img/icons.png);
+  background-repeat: no-repeat;
+}
+
+a.home {
+  background-position: 0 -32px;
+  position: relative;
+  left: 146px;
+  top: -6px;
+}
+
+a.sourceCode {
+  background-position: 0 0;
+  position: relative;
+  left: 146px;
+  top: -6px;
+}
+
+.options button {
+  width: 24px;
+}
+
+.hide {
+  display: none;
 }
 
 .controls,
@@ -89,26 +129,25 @@ button.selected {
   display: inline-block;
   background: #ffffff;
   width: 300px;
-  padding: 20px;
+  padding: 16px 30px 16px 30px;
 }
 
 .controls div label {
   width: 100px;
 }
 
-.controls > *,
+.controls > div:not(.header),
 .controls .control input,
 .controls .control select {
   display: none;
 }
 
-.controls .name,
-.controls .play {
-  margin-bottom: 8px;
+.header {
+  margin-top: 12px;
 }
-
-.controls .name {
-  display: block;
+.header .name {
+  display: inline-block;
+  width: 130px;
 }
 
 .wrapper.graph .graph {
@@ -118,15 +157,21 @@ button.selected {
   display: block;
 }
 
-.controls.playable .play {
-  display: block;
+.header #play,
+.header [for="play"] {
+  display: none;
 }
+.header.playable #play,
+.header.playable [for="play"] {
+  display: inline-block;
+}
+
 .controls.types .types {
   display: block;
 }
-.controls.control1in .control:nth-child(3),
-.controls.control1val .control:nth-child(3),
-.controls.control1type .control:nth-child(3) {
+.controls.control1in .control:nth-child(1),
+.controls.control1val .control:nth-child(1),
+.controls.control1type .control:nth-child(1) {
   display: block;
 }
 .controls.control1in #control1in,
@@ -136,9 +181,9 @@ button.selected {
 .controls.control1val #control1val {
   display: inline;
 }
-.controls.control2in .control:nth-child(4),
-.controls.control2val .control:nth-child(4),
-.controls.control2type .control:nth-child(4) {
+.controls.control2in .control:nth-child(2),
+.controls.control2val .control:nth-child(2),
+.controls.control2type .control:nth-child(2) {
   display: block;
 }
 .controls.control2in #control2in,
@@ -148,9 +193,9 @@ button.selected {
 .controls.control2val #control2val {
   display: inline;
 }
-.controls.control3in .control:nth-child(5),
-.controls.control3val .control:nth-child(5),
-.controls.control3type .control:nth-child(5) {
+.controls.control3in .control:nth-child(3),
+.controls.control3val .control:nth-child(3),
+.controls.control3type .control:nth-child(3) {
   display: block;
 }
 .controls.control3in #control3in,
@@ -160,9 +205,9 @@ button.selected {
 .controls.control3val #control3val {
   display: inline;
 }
-.controls.control4in .control:nth-child(6),
-.controls.control4val .control:nth-child(6),
-.controls.control4type .control:nth-child(6) {
+.controls.control4in .control:nth-child(4),
+.controls.control4val .control:nth-child(4),
+.controls.control4type .control:nth-child(4) {
   display: block;
 }
 .controls.control4in #control4in,
@@ -172,9 +217,9 @@ button.selected {
 .controls.control4val #control4val {
   display: inline;
 }
-.controls.control5in .control:nth-child(7),
-.controls.control5val .control:nth-child(7),
-.controls.control5type .control:nth-child(7) {
+.controls.control5in .control:nth-child(5),
+.controls.control5val .control:nth-child(5),
+.controls.control5type .control:nth-child(5) {
   display: block;
 }
 .controls.control5in #control5in,
@@ -184,9 +229,9 @@ button.selected {
 .controls.control5val #control5val {
   display: inline;
 }
-.controls.control6in .control:nth-child(8),
-.controls.control6val .control:nth-child(8),
-.controls.control6type .control:nth-child(8) {
+.controls.control6in .control:nth-child(6),
+.controls.control6val .control:nth-child(6),
+.controls.control6type .control:nth-child(6) {
   display: block;
 }
 .controls.control6in #control6in,
@@ -197,8 +242,9 @@ button.selected {
   display: inline;
 }
 
+.header,
 .control {
-  margin-bottom: 8px;
+  text-align: left;
 }
 
 .control .short {
@@ -213,51 +259,7 @@ button.selected {
 
 .control select,
 .control input {
-  width: 160px;
-  max-width: 160px;
-}
-
-input[type="number"] {
-  width: 100px;
-}
-
-textarea {
-  width: 280px;
-  height: 200px;
-}
-
-a.home,
-a.sourceCode {
-  display: inline-block;
-  cursor: pointer;
-  outline: 0;
-  width: 32px;
-  height: 32px;
-  text-indent: -99999px;
-  background-image: url(../img/icons.png);
-  background-repeat: no-repeat;
-}
-
-a.home {
-  background-position: -736px -32px;
-  position: relative;
-  left: 136px;
-  top: 2px;
-}
-
-a.sourceCode {
-  background-position: -736px 0;
-  position: relative;
-  left: 136px;
-  top: 2px;
-}
-
-ol {
-  font-family: monospace;
-  white-space: pre;
-}
-
-li::marker {
-  font-size: 10px;
-  color: grey;
+  width: 150px;
+  max-width: 150px;
+  padding: 0px;
 }

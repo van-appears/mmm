@@ -9,7 +9,7 @@
     />
   </head>
   <body>
-    <div class="wrapper">
+    <div class="wrapper" style="display: none">
       <div class="windows">
         <button value="graph">Graph</button>
         <button value="sequencer">Sequencer</button>
@@ -39,14 +39,12 @@
           <button value="change">Change</button>
           <button value="cancel">Cancel</button>
         </div>
+        <div class="header">
+          <span class="name"></span>
+          <label for="play">Play</label>
+          <input id="play" type="checkbox" />
+        </div>
         <div class="controls">
-          <div class="name">
-            <span></span>
-          </div>
-          <div class="play">
-            <label for="play">Play</label>
-            <input id="play" type="checkbox" />
-          </div>
           <div class="control">
             <span class="short"></span>
             <span class="long"></span>

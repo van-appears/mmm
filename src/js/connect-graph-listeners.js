@@ -9,9 +9,10 @@ module.exports = function connectGraphListeners(model) {
   let nextType = null;
   let lastControl = null;
 
+  const headerEl = select(".header");
   const controlArea = select(".controls");
   const confirmEl = select(".confirm");
-  const label = select(".name span");
+  const label = select(".header span");
   const play = select("#play");
   const controlShortEls = select(".controls .control .short");
   const controlLongEls = select(".controls .control .long");
@@ -33,14 +34,11 @@ module.exports = function connectGraphListeners(model) {
   function connect(index) {
     currentIdx = index;
     current = items[index];
-    label.textContent = current.label();
+    label.textContent = `${current.idx} ${current.type}`;
     const { playing, playable } = current;
 
     let classes = "controls " + current.type + " ";
-    if (playable) {
-      classes += "playable ";
-      play.checked = playing;
-    }
+    play.checked = playing;
 
     const controls = current.controls();
     for (let cIndex = 0; cIndex < controls.length; cIndex++) {
@@ -69,6 +67,7 @@ module.exports = function connectGraphListeners(model) {
       }
     }
 
+    headerEl.className = "header" + (playable ? " playable" : "");
     controlArea.className = classes;
   }
 
