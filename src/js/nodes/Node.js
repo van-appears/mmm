@@ -35,6 +35,9 @@ class Node {
   }
 
   play(bool) {
+    if (!this.playable) {
+      return;
+    }
     if (bool) {
       this.connector().connect(this.ctx.destination);
       this.playing = true;
@@ -66,14 +69,9 @@ class Node {
   }
 
   describe() {
-    const lines = [];
-    if (this.idx > 0 && this.type !== "empty") {
-      lines.push(`${this.idx} control ${this.type}`);
-    }
-    this.controls()
+    return this.controls()
       .filter(x => x.get() !== undefined && x.get() !== "")
-      .forEach(x => lines.push(`${this.idx} ${x.short} ${x.get()}`));
-    return lines;
+      .map(x => `${this.idx} ${x.short} ${x.get()}`);
   }
 
   destroy() {

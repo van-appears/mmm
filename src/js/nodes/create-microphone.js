@@ -2,9 +2,9 @@ const Node = require("./Node");
 const constants = require("../constants");
 
 class Microphone extends Node {
-  constructor(ctx, model, idx, stream) {
+  constructor(ctx, model, idx, mediaStream) {
     super(ctx, model, idx, constants.MICROPHONE, true);
-    this.input = ctx.createMediaStreamSource(stream);
+    this.input = ctx.createMediaStreamSource(mediaStream);
     this.gain = ctx.createGain();
     this.input.connect(this.gain);
 
@@ -43,6 +43,6 @@ class Microphone extends Node {
   }
 }
 
-module.exports = function (ctx, model, idx, stream) {
-  return new Microphone(ctx, model, idx, stream);
+module.exports = function (ctx, model, idx, mediaStream) {
+  return new Microphone(ctx, model, idx, mediaStream);
 };

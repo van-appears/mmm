@@ -1,3 +1,4 @@
+const constants = require("./constants");
 const select = require("./select");
 const applyCommand = require("./apply-command");
 const initialiseNodes = require("./initialise-nodes");
@@ -12,11 +13,16 @@ module.exports = function connectExportListeners(model) {
   const contentEl = select("#content");
 
   function display() {
-    const desc = model.items
+    const types = model.items
+      .filter(i => ![constants.EMPTY, constants.MICROPHONE].includes(i.type))
+      .map(i => `${i.idx} control ${i.type}`);
+    const controls = model.items
       .map(i => i.describe().join("\n"))
-      .filter(i => i)
-      .join("\n");
-    contentEl.value = desc;
+      .filter(i => i);
+    const playing = model.items
+      .filter(i => i.type !== constants.EMPTY && i.playing)
+      .map(i => `${i.idx} play`);
+    contentEl.value = types.concat(controls).concat(playing).join("\n");
   }
 
   function reset() {

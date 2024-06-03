@@ -1,5 +1,5 @@
-const connectAudio = require("./connect-audio");
 const createModel = require("./create-model");
+const connectMediaStream = require("./connect-media-stream");
 const connectWindowListeners = require("./connect-window-listeners");
 const connectGraphListeners = require("./connect-graph-listeners");
 const connectSequencerListeners = require("./connect-sequencer-listeners");
@@ -8,8 +8,8 @@ const initialiseNodes = require("./initialise-nodes");
 
 window.onload = function () {
   const wrapper = document.querySelector(".wrapper");
-  connectAudio(function (err, audio) {
-    if (!err) {
+  connectMediaStream(function (err, mediaStream) {
+    if (err) {
       wrapper.innerHTML = "Failed to connect audio";
       wrapper.style = "";
       console.log(err);
@@ -17,12 +17,12 @@ window.onload = function () {
       document.body.className = "started";
       wrapper.style = "";
 
-      const model = createModel();
+      const model = createModel(mediaStream);
       connectWindowListeners(model);
       connectGraphListeners(model);
       connectSequencerListeners(model);
       connectExportListeners(model);
-      initialiseNodes(model, audio);
+      initialiseNodes(model);
       model.dispatch(null, "currentIdx", 0);
     }
   });

@@ -15,14 +15,13 @@ npm run build
 
 
 TODO
-- import / export - add sequencer
-- allow 0 configurable if not permission
 - disable graphs in destroy
+- consistent time s or ms
+- layout
 
 - max delay
 - time change for val
 
 - multiple sequencers
 - looper
-- layout
 - internal saves

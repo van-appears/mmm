@@ -4,7 +4,7 @@ const createDelay = require("./nodes/create-delay");
 const createEcho = require("./nodes/create-echo");
 const createGain = require("./nodes/create-gain");
 
-module.exports = function createModel() {
+module.exports = function createModel(mediaStream) {
   const callbacks = [];
   const dispatch = (obj, prop, val) => {
     callbacks.forEach(callback => callback(obj, prop, val));
@@ -23,6 +23,7 @@ module.exports = function createModel() {
   const types = {};
   const model = {
     audioCtx,
+    mediaStream,
     items,
     types,
     connections,

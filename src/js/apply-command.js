@@ -11,9 +11,18 @@ module.exports = function (model) {
       return;
     }
 
+    if (short === "play") {
+      items[idx].play(true);
+      return;
+    }
+
+    if (short === "stop") {
+      items[idx].play(false);
+      return;
+    }
+
     const controls = items[idx].controls() || [];
     const control = controls.find(x => x.short === short) || {};
-
     if (control.type === "val") {
       const parsed = parseFloat(value);
       if (parsed) {
