@@ -51,6 +51,10 @@ class Node {
     return `${this.idx} ${this.type}`;
   }
 
+  title() {
+    return this.label();
+  }
+
   controls() {
     return [];
   }

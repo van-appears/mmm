@@ -19,7 +19,7 @@ class Oscillator extends Node {
     this._controls[4].set("sine");
   }
 
-  label() {
+  title() {
     return `${this.idx} ${this.type} ${this.osc.type}`;
   }
 

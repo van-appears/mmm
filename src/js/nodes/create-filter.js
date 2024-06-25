@@ -14,7 +14,7 @@ class Filter extends Node {
     this._controls[4].set("lowpass");
   }
 
-  label() {
+  title() {
     return `${this.idx} ${this.type} ${this.filter.type}`;
   }
 

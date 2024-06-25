@@ -1,54 +1,57 @@
 const select = require("./select");
+const components = require("./components");
 
 module.exports = function connectWindowListeners() {
-  const windowGraph = select("button[value=graph]");
-  const windowSequencer = select("button[value=sequencer]");
-  const windowExport = select("button[value=export]");
-  const graphEl = select(".graph");
-  const sequencerEl = select(".sequencer");
-  const exportEl = select(".export");
+  const {
+    graphButton,
+    sequencerButton,
+    backupButton,
+    graph,
+    sequencer,
+    backup
+  } = components.windows;
 
-  windowGraph.addEventListener(
+  graphButton.addEventListener(
     "click",
     function () {
-      windowGraph.className = "selected";
-      windowSequencer.className = "";
-      windowExport.className = "";
+      graphButton.className = "selected";
+      sequencerButton.className = "";
+      backupButton.className = "";
 
-      graphEl.className = "graph";
-      sequencerEl.className = "sequencer hide";
-      exportEl.className = "export hide";
+      graph.className = "graph";
+      sequencer.className = "sequencer hide";
+      backup.className = "export hide";
     },
     false
   );
 
-  windowSequencer.addEventListener(
+  sequencerButton.addEventListener(
     "click",
     function () {
-      windowGraph.className = "";
-      windowSequencer.className = "selected";
-      windowExport.className = "";
+      graphButton.className = "";
+      sequencerButton.className = "selected";
+      backupButton.className = "";
 
-      graphEl.className = "graph hide";
-      sequencerEl.className = "sequencer";
-      exportEl.className = "export hide";
+      graph.className = "graph hide";
+      sequencer.className = "sequencer";
+      backup.className = "export hide";
     },
     false
   );
 
-  windowExport.addEventListener(
+  backupButton.addEventListener(
     "click",
     function () {
-      windowGraph.className = "";
-      windowSequencer.className = "";
-      windowExport.className = "selected";
+      graphButton.className = "";
+      sequencerButton.className = "";
+      backupButton.className = "selected";
 
-      graphEl.className = "graph hide";
-      sequencerEl.className = "sequencer hide";
-      exportEl.className = "export";
+      graph.className = "graph hide";
+      sequencer.className = "sequencer hide";
+      backup.className = "export";
     },
     false
   );
 
-  windowGraph.click();
+  graphButton.click();
 };

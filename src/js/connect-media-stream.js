@@ -8,13 +8,14 @@ module.exports = function connectMediaStream(callback) {
     navigator.mediaDevices
       .getUserMedia(MEDIA_CONSTRAINTS)
       .then(function (mediaStream) {
-        callback(null, mediaStream);
+        callback(mediaStream);
       })
       .catch(function (err) {
         console.log(err);
-        callback(null, null);
+        callback(null);
       });
   } else {
-    callback(new Error("navigator.mediaDevices not supported"));
+    console.log("navigator.mediaDevices not supported");
+    callback(null);
   }
 };

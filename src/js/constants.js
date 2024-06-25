@@ -7,5 +7,6 @@ module.exports = {
   MICROPHONE: "microphone",
   OSCILLATOR: "oscillator",
   FALLBACK_DELAY: 1000, // 1 second
-  MAX_DELAY_SECONDS: 10
+  MAX_DELAY_SECONDS: 10,
+  SEQUENCE_SEPARATOR: "---seq "
 };

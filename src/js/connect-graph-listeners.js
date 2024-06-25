@@ -34,7 +34,7 @@ module.exports = function connectGraphListeners(model) {
   function connect(index) {
     currentIdx = index;
     current = items[index];
-    label.textContent = `${current.idx} ${current.type}`;
+    label.textContent = current.label();
     const { playing, playable } = current;
 
     let classes = "controls " + current.type + " ";
@@ -127,8 +127,9 @@ module.exports = function connectGraphListeners(model) {
       if (current) {
         nextType = evt.target.value;
         lastControl = items[currentIdx];
+
         if (
-          lastControl.type === types[nextType] ||
+          lastControl.type === nextType ||
           lastControl.type === constants.MICROPHONE
         ) {
           return;
@@ -136,6 +137,7 @@ module.exports = function connectGraphListeners(model) {
         if (lastControl.type === constants.EMPTY) {
           convert();
         } else {
+          select("button[value=change").textContent = "Change to " + nextType;
           controlArea.className = "controls hide";
           confirmEl.className = "confirm";
         }
@@ -152,6 +154,7 @@ module.exports = function connectGraphListeners(model) {
   select("button[value=cancel").onclick = function (evt) {
     controlArea.className = "controls";
     confirmEl.className = "confirm hide";
+    connect(currentIdx);
   };
 
   model.register((obj, prop, value) => {

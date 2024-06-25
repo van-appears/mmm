@@ -3,14 +3,11 @@ const select = require("./select");
 const applyCommand = require("./apply-command");
 const initialiseNodes = require("./initialise-nodes");
 const commandSplitter = /^([0-9]{1}) *([a-zA-Z]*) *(.*)$/;
+const components = require("./components");
 
 module.exports = function connectExportListeners(model) {
   const executeCommand = applyCommand(model);
-  const importButton = select("#import");
-  const copyButton = select("#copy");
-  const resetButton = select("#reset");
   const windowExport = select("button[value=export]");
-  const contentEl = select("#content");
 
   function display() {
     const types = model.items
@@ -22,16 +19,30 @@ module.exports = function connectExportListeners(model) {
     const playing = model.items
       .filter(i => i.type !== constants.EMPTY && i.playing)
       .map(i => `${i.idx} play`);
-    contentEl.value = types.concat(controls).concat(playing).join("\n");
+
+    let sequence = components.sequencer.content.value || "";
+    if (sequence.length > 0) {
+      sequence =
+        "\n" +
+        constants.SEQUENCE_SEPARATOR +
+        components.sequencer.delayField.value +
+        "\n" +
+        sequence;
+    }
+
+    components.backup.content.value =
+      types.concat(controls).concat(playing).join("\n") + sequence;
   }
 
   function reset() {
     initialiseNodes(model);
+    components.sequencer.delayField.value = "";
+    components.sequencer.content.value = "";
   }
 
-  windowExport.addEventListener("click", display, false);
+  components.windows.backupButton.addEventListener("click", display, false);
 
-  resetButton.addEventListener(
+  components.backup.resetButton.addEventListener(
     "click",
     function () {
       reset();
@@ -41,10 +52,15 @@ module.exports = function connectExportListeners(model) {
     false
   );
 
-  importButton.addEventListener(
+  components.backup.importButton.addEventListener(
     "click",
     function () {
-      const lines = contentEl.value.split("\n");
+      const contentValue = components.backup.content.value;
+      const [graphContent, sequencerContent] = contentValue.split(
+        constants.SEQUENCE_SEPARATOR
+      );
+
+      const lines = graphContent.split("\n");
       reset();
       lines.forEach(l => {
         const pieces = l.split(";");
@@ -56,14 +72,20 @@ module.exports = function connectExportListeners(model) {
           }
         });
       });
+
+      const [first, remainder] = sequencerContent.split(/\n(.*)/s);
+      components.sequencer.delayField.value = first;
+      components.sequencer.content.value = remainder;
+
       model.dispatch(null, "currentIdx", 0);
     },
     false
   );
 
-  copyButton.addEventListener("click", function () {
-    contentEl.select();
-    contentEl.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(contentEl.value);
+  components.backup.copyButton.addEventListener("click", function () {
+    const backupContent = components.backup.content;
+    backupContent.select();
+    backupContent.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(backupContent.value);
   });
 };

@@ -4,11 +4,11 @@ const { FALLBACK_DELAY } = require("./constants");
 const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
+const components = require("./components");
 
 module.exports = function connectSequencerListeners(model) {
   const executeCommand = applyCommand(model);
   const sequencerEl = select(".sequencer");
-  const sequencerControlEl = select("#sequencerControl");
   const linesEl = select("#sequence");
   const delay = select("#delay");
 
@@ -65,14 +65,14 @@ module.exports = function connectSequencerListeners(model) {
     running = !running;
     if (running) {
       sequencerEl.className = "sequencer running";
-      sequencerControlEl.textContent = "Stop";
+      components.sequencer.startStopButton.textContent = "Stop";
       timeoutId = setTimeout(processLine, parseDelay());
     } else {
       sequencerEl.className = "sequencer";
-      sequencerControlEl.textContent = "Start";
+      components.sequencer.startStopButton.textContent = "Start";
       clearTimeout(timeoutId);
     }
   }
 
-  sequencerControlEl.onclick = toggle;
+  components.sequencer.startStopButton.onclick = toggle;
 };
