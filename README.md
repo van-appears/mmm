@@ -15,6 +15,8 @@ npm run build
 
 
 TODO
+- highlight selected control type
+- keep controls visible when changing
 - disable graphs in destroy
 - consistent time s or ms
 - layout

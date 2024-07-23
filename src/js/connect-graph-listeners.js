@@ -1,133 +1,124 @@
 const constants = require("./constants");
 const fillSelect = require("./fill-select");
-const select = require("./select");
+const graphComponents = require("./components").graph;
 
 module.exports = function connectGraphListeners(model) {
   const { items, types, connections } = model;
-  let currentIdx = 0;
   let current = null;
   let nextType = null;
   let lastControl = null;
 
-  const headerEl = select(".header");
-  const controlArea = select(".controls");
-  const confirmEl = select(".confirm");
-  const label = select(".header span");
-  const play = select("#play");
-  const controlShortEls = select(".controls .control .short");
-  const controlLongEls = select(".controls .control .long");
-  const controlValEls = select(".controls .control input");
-  const controlInEls = select(".controls .control select");
-  const convertEls = select(".nodes button");
-  const optionEls = select(".options button");
-  play.checked = false;
-
   function setOptionStyle(idx) {
-    const style =
-      items[idx].type +
-      (items[idx].playing ? " playing" : "") +
-      (idx === currentIdx ? " selected" : "");
-    optionEls[idx].className = style;
-    optionEls[idx].setAttribute("title", style);
+    const style = items[idx].type + (items[idx].playing ? " playing" : "");
+    graphComponents.optionButtons[idx].className = style;
+    graphComponents.optionButtons[idx].setAttribute("title", style);
   }
 
-  function connect(index) {
-    currentIdx = index;
+  function connectOption(index) {
     current = items[index];
-    label.textContent = current.label();
+    graphComponents.componentLabel.textContent = current.label();
     const { playing, playable } = current;
-
-    let classes = "controls " + current.type + " ";
-    play.checked = playing;
+    if (playable) {
+      graphComponents.playButton.checked = playing;
+      graphComponents.playButton.show(true);
+      graphComponents.playLabel.show(true);
+    } else {
+      graphComponents.playButton.show(false);
+      graphComponents.playLabel.show(false);
+    }
 
     const controls = current.controls();
-    for (let cIndex = 0; cIndex < controls.length; cIndex++) {
+    for (let cIndex = 0; cIndex < 6; cIndex++) {
       const control = controls[cIndex];
-      classes += "control" + (cIndex + 1) + control.type + " ";
-      controlShortEls[cIndex].textContent = `(${control.short})`;
-      controlLongEls[cIndex].textContent = control.label;
+      const controlComponent = graphComponents.controls[cIndex];
+      controlComponent.area.show(false);
+      if (!control) {
+        continue;
+      }
+
+      controlComponent.shortText.textContent = `(${control.short})`;
+      controlComponent.longText.textContent = control.label;
+      controlComponent.input.show(false);
+      controlComponent.select.show(false);
 
       if (control.type === "val") {
-        controlValEls[cIndex].value = control.get();
+        controlComponent.input.value = control.get();
+        controlComponent.input.show(true);
       } else if (control.type === "in") {
         fillSelect(
-          controlInEls[cIndex],
+          controlComponent.select,
           control.get(),
           items
             .map(x => x.asOption())
             .filter(x => x.value !== index && x.type !== constants.EMPTY),
           true
         );
+        controlComponent.select.show(true);
       } else if (control.type === "type") {
         fillSelect(
-          controlInEls[cIndex],
+          controlComponent.select,
           control.get(),
           control.values.map(x => ({ value: x, label: x }))
         );
+        controlComponent.select.show(true);
       }
+
+      controlComponent.area.show(true);
     }
-
-    headerEl.className = "header" + (playable ? " playable" : "");
-    controlArea.className = classes;
-  }
-
-  for (let index = 0; index < optionEls.length; index++) {
-    optionEls[index].onclick = function () {
-      const lastIdx = currentIdx;
-      connect(index);
-      setOptionStyle(lastIdx);
-      setOptionStyle(index);
-    };
-  }
-
-  play.onclick = function (evt) {
-    if (current) {
-      current.play(evt.target.checked);
-      setOptionStyle(currentIdx);
-    }
-  };
-
-  for (let index = 0; index < controlValEls.length; index++) {
-    controlValEls[index].value = null;
-    controlValEls[index].onchange = function (evt) {
-      if (current) {
-        current.controls()[index].set(evt.target.value);
-        label.textContent = current.label();
-      }
-    };
-  }
-
-  for (let index = 0; index < controlInEls.length; index++) {
-    controlInEls[index].onchange = function (evt) {
-      if (current) {
-        const val = evt.target.value;
-        current.controls()[index].set(parseInt(val) || val);
-        label.textContent = current.label();
-      }
-    };
   }
 
   function convert() {
-    const newControl = types[nextType](currentIdx);
+    const newControl = types[nextType](model.currentIdx);
     lastControl.setValuesTo(newControl);
-    const currentConnections = model.connections[currentIdx];
+    const currentConnections = model.connections[model.currentIdx];
     Object.keys(currentConnections).forEach(key => {
       lastControl.connector().connect(currentConnections[key]);
       newControl.connector().connect(currentConnections[key]);
     });
 
     lastControl.destroy();
-    items[currentIdx] = newControl;
-    connect(currentIdx);
-    setOptionStyle(currentIdx);
+    items[model.currentIdx] = newControl;
+    connectOption(model.currentIdx);
+    setOptionStyle(model.currentIdx);
   }
 
-  for (let index = 0; index < convertEls.length; index++) {
-    convertEls[index].onclick = function (evt) {
+  graphComponents.playButton.onclick = function (evt) {
+    if (current) {
+      current.play(evt.target.checked);
+      setOptionStyle(model.currentIdx);
+    }
+  };
+
+  graphComponents.optionButtons.forEach((optionButton, index) => {
+    optionButton.onclick = function () {
+      const lastIdx = model.currentIdx;
+      model.update("currentIdx", index);
+      optionButton.selected();
+      graphComponents.optionButtons[lastIdx].unselect();
+    };
+  });
+
+  graphComponents.controls.forEach((controlComponent, index) => {
+    controlComponent.select.onchange = function (evt) {
+      if (current) {
+        current.controls()[index].set(evt.target.value);
+        graphComponents.componentLabel.textContent = current.label();
+      }
+    };
+    controlComponent.input.onchange = function (evt) {
+      if (current) {
+        const val = evt.target.value;
+        current.controls()[index].set(parseInt(val) || val);
+        graphComponents.componentLabel.textContent = current.label();
+      }
+    };
+  });
+
+  graphComponents.convertButtons.forEach((convertButton, index) => {
+    convertButton.onclick = function (evt) {
       if (current) {
         nextType = evt.target.value;
-        lastControl = items[currentIdx];
-
+        lastControl = items[model.currentIdx];
         if (
           lastControl.type === nextType ||
           lastControl.type === constants.MICROPHONE
@@ -137,31 +128,35 @@ module.exports = function connectGraphListeners(model) {
         if (lastControl.type === constants.EMPTY) {
           convert();
         } else {
-          select("button[value=change").textContent = "Change to " + nextType;
-          controlArea.className = "controls hide";
-          confirmEl.className = "confirm";
+          graphComponents.changeButton.textContent = "Change to " + nextType;
+          graphComponents.controlsArea.show(false);
+          graphComponents.confirmArea.show(true);
         }
       }
     };
-  }
+  });
 
-  select("button[value=change").onclick = function (evt) {
-    controlArea.className = "controls";
-    confirmEl.className = "confirm hide";
+  graphComponents.changeButton.onclick = function (evt) {
+    graphComponents.controlsArea.show(true);
+    graphComponents.confirmArea.show(false);
     convert();
   };
 
-  select("button[value=cancel").onclick = function (evt) {
-    controlArea.className = "controls";
-    confirmEl.className = "confirm hide";
-    connect(currentIdx);
+  graphComponents.cancelButton.onclick = function (evt) {
+    graphComponents.controlsArea.show(true);
+    graphComponents.confirmArea.show(false);
+    connectOption(model.currentIdx);
   };
 
   model.register((obj, prop, value) => {
     if (Array.isArray(obj)) {
       setOptionStyle(prop);
     } else if (prop === "currentIdx") {
-      connect(value);
+      connectOption(value);
+    } else if (prop === "window") {
+      graphComponents.area.show(value === "graph");
     }
   });
+
+  model.update("currentIdx", 0);
 };

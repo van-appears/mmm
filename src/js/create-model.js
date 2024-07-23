@@ -6,9 +6,9 @@ const createGain = require("./nodes/create-gain");
 
 module.exports = function createModel(mediaStream) {
   const callbacks = [];
-  const dispatch = (obj, prop, val) => {
+  function displatch(obj, prop, val) {
     callbacks.forEach(callback => callback(obj, prop, val));
-  };
+  }
   const handler = {
     set(obj, prop, val) {
       obj[prop] = val;
@@ -16,18 +16,22 @@ module.exports = function createModel(mediaStream) {
       return true;
     }
   };
-
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const items = new Proxy(new Array(10), handler);
   const connections = new Array(10).fill(0).map(x => ({}));
   const types = {};
   const model = {
+    currentIdx: 0,
     audioCtx,
     mediaStream,
     items,
     types,
     connections,
     dispatch,
+    update(prop, val) {
+      this[prop] = val;
+      this.dispatch(this, prop, val);
+    },
     register(callback) {
       callbacks.push(callback);
     }

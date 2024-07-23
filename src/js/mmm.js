@@ -1,9 +1,9 @@
 const createModel = require("./create-model");
 const connectMediaStream = require("./connect-media-stream");
-const connectWindowListeners = require("./connect-window-listeners");
 const connectGraphListeners = require("./connect-graph-listeners");
 const connectSequencerListeners = require("./connect-sequencer-listeners");
-const connectExportListeners = require("./connect-export-listeners");
+const connectBackupListeners = require("./connect-backup-listeners");
+const connectWindowsListeners = require("./connect-windows-listeners");
 const initialiseNodes = require("./initialise-nodes");
 
 window.onload = function () {
@@ -13,11 +13,11 @@ window.onload = function () {
     wrapper.style = "";
 
     const model = createModel(mediaStream);
-    connectWindowListeners(model);
+    initialiseNodes(model);
+
     connectGraphListeners(model);
     connectSequencerListeners(model);
-    connectExportListeners(model);
-    initialiseNodes(model);
-    model.dispatch(null, "currentIdx", 0);
+    connectBackupListeners(model);
+    connectWindowsListeners(model);
   });
 };

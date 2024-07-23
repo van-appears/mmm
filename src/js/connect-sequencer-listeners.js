@@ -4,12 +4,11 @@ const { FALLBACK_DELAY } = require("./constants");
 const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
-const components = require("./components");
+const sequencerComponents = require("./components").sequencer;
 
 module.exports = function connectSequencerListeners(model) {
   const executeCommand = applyCommand(model);
   const sequencerEl = select(".sequencer");
-  const linesEl = select("#sequence");
   const delay = select("#delay");
 
   let lineNum = 0;
@@ -22,7 +21,7 @@ module.exports = function connectSequencerListeners(model) {
   }
 
   function processLine() {
-    const lines = linesEl.value.split("\n");
+    const lines = sequencerComponents.content.value.split("\n");
     if (lineNum >= lines.length) {
       lineNum = 0;
     }
@@ -65,14 +64,20 @@ module.exports = function connectSequencerListeners(model) {
     running = !running;
     if (running) {
       sequencerEl.className = "sequencer running";
-      components.sequencer.startStopButton.textContent = "Stop";
+      sequencerComponents.startStopButton.textContent = "Stop";
       timeoutId = setTimeout(processLine, parseDelay());
     } else {
       sequencerEl.className = "sequencer";
-      components.sequencer.startStopButton.textContent = "Start";
+      sequencerComponents.startStopButton.textContent = "Start";
       clearTimeout(timeoutId);
     }
   }
 
-  components.sequencer.startStopButton.onclick = toggle;
+  sequencerComponents.startStopButton.onclick = toggle;
+
+  model.register((obj, prop, value) => {
+    if (prop === "window") {
+      sequencerComponents.area.show(value === "sequencer");
+    }
+  });
 };
