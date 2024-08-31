@@ -6,7 +6,7 @@ const createGain = require("./nodes/create-gain");
 
 module.exports = function createModel(mediaStream) {
   const callbacks = [];
-  function displatch(obj, prop, val) {
+  function dispatch(obj, prop, val) {
     callbacks.forEach(callback => callback(obj, prop, val));
   }
   const handler = {

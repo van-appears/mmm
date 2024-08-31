@@ -35,7 +35,7 @@ class Gain extends Node {
       },
       {
         type: "in",
-        short: "g",
+        short: "gm",
         label: "Gain Mod",
         set(val) {
           that.replaceOtherOnParam(

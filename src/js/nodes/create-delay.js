@@ -7,7 +7,7 @@ class Delay extends Node {
     this.delay = ctx.createDelay(constants.MAX_DELAY_SECONDS);
 
     this._controls = this.initControls();
-    this._controls[0].set(1000);
+    this._controls[0].set(1);
   }
 
   connector() {
@@ -24,11 +24,11 @@ class Delay extends Node {
       {
         type: "val",
         short: "t",
-        label: "Time (ms)",
+        label: "Time <= 10s",
         max: constants.MAX_DELAY_SECONDS,
         set(val) {
           that.delayTimeValue = val;
-          that.delay.delayTime.setTargetAtTime(val, 0, 0);
+          that.delay.delayTime.setTargetAtTime(val * 1000, 0, 0);
         },
         get() {
           return that.delayTimeValue;

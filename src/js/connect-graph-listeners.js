@@ -27,6 +27,14 @@ module.exports = function connectGraphListeners(model) {
       graphComponents.playLabel.show(false);
     }
 
+    graphComponents.convertButtons.forEach(button => {
+      if (button.value === current.type) {
+        button.selected();
+      } else {
+        button.unselect();
+      }
+    });
+
     const controls = current.controls();
     for (let cIndex = 0; cIndex < 6; cIndex++) {
       const control = controls[cIndex];
@@ -108,7 +116,13 @@ module.exports = function connectGraphListeners(model) {
     controlComponent.input.onchange = function (evt) {
       if (current) {
         const val = evt.target.value;
-        current.controls()[index].set(parseInt(val) || val);
+        let numVal = parseFloat(val);
+        const control = current.controls()[index];
+        if (control.max && numVal && numVal > control.max) {
+          numVal = control.max;
+          controlComponent.input.value = numVal;
+        }
+        current.controls()[index].set(numVal || val);
         graphComponents.componentLabel.textContent = current.label();
       }
     };

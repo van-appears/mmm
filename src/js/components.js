@@ -66,7 +66,8 @@ module.exports = {
     area: select(".sequencer"),
     delayField: select("#delay"),
     startStopButton: select("#startstop"),
-    content: select("#sequence")
+    content: select("#sequence"),
+    delay: select("#delay")
   },
   backup: {
     area: select(".backup"),

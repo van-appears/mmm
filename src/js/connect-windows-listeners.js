@@ -3,38 +3,26 @@ const windowsComponents = require("./components").windows;
 module.exports = function connectWindowsListeners(model) {
   const { graphButton, sequencerButton, backupButton } = windowsComponents;
 
-  graphButton.addEventListener(
-    "click",
-    function () {
-      graphButton.selected();
-      sequencerButton.unselect();
-      backupButton.unselect();
-      model.update("window", "graph");
-    },
-    false
-  );
+  graphButton.onclick = function () {
+    graphButton.selected();
+    sequencerButton.unselect();
+    backupButton.unselect();
+    model.update("window", "graph");
+  };
 
-  sequencerButton.addEventListener(
-    "click",
-    function () {
-      graphButton.unselect();
-      sequencerButton.selected();
-      backupButton.unselect();
-      model.update("window", "sequencer");
-    },
-    false
-  );
+  sequencerButton.onclick = function () {
+    graphButton.unselect();
+    sequencerButton.selected();
+    backupButton.unselect();
+    model.update("window", "sequencer");
+  };
 
-  backupButton.addEventListener(
-    "click",
-    function () {
-      graphButton.unselect();
-      sequencerButton.unselect();
-      backupButton.selected();
-      model.update("window", "backup");
-    },
-    false
-  );
+  backupButton.onclick = function () {
+    graphButton.unselect();
+    sequencerButton.unselect();
+    backupButton.selected();
+    model.update("window", "backup");
+  };
 
   graphButton.click();
 };

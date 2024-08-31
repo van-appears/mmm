@@ -141,6 +141,7 @@ a.sourceCode {
 .header {
   margin-top: 12px;
 }
+
 .header .name {
   display: inline-block;
   width: 130px;
@@ -164,12 +165,12 @@ a.sourceCode {
 
 .control .short {
   display: inline-block;
-  width: 40px;
+  width: 35px;
 }
 
 .control .long {
   display: inline-block;
-  width: 90px;
+  width: 100px;
 }
 
 .control select,

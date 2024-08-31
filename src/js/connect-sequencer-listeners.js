@@ -1,6 +1,6 @@
 const select = require("./select");
 const applyCommand = require("./apply-command");
-const { FALLBACK_DELAY } = require("./constants");
+const { FALLBACK_DELAY, MAX_DELAY_SECONDS } = require("./constants");
 const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
 const waitSplitter = /^w *([0-9.]*)(.*)$/;
@@ -8,16 +8,14 @@ const sequencerComponents = require("./components").sequencer;
 
 module.exports = function connectSequencerListeners(model) {
   const executeCommand = applyCommand(model);
-  const sequencerEl = select(".sequencer");
-  const delay = select("#delay");
-
   let lineNum = 0;
   let timeoutId = null;
   let running = false;
   let lastIdx = -1;
 
   function parseDelay() {
-    return parseFloat(delay) || FALLBACK_DELAY;
+    const delay = sequencerComponents.delay.value;
+    return parseFloat(delay) * 1000 || FALLBACK_DELAY;
   }
 
   function processLine() {
@@ -43,8 +41,8 @@ module.exports = function connectSequencerListeners(model) {
             const [, duration, optUnit] = waitCommand;
             const delay =
               optUnit === "ms"
-                ? Math.floor(duration)
-                : Math.floor(duration * 1000);
+                ? Math.floor(parseFloat(duration))
+                : Math.floor(parseFloat(duration) * 1000);
 
             lineNum++;
             timeoutId = setTimeout(processLine, delay);
@@ -63,11 +61,9 @@ module.exports = function connectSequencerListeners(model) {
   function toggle() {
     running = !running;
     if (running) {
-      sequencerEl.className = "sequencer running";
       sequencerComponents.startStopButton.textContent = "Stop";
       timeoutId = setTimeout(processLine, parseDelay());
     } else {
-      sequencerEl.className = "sequencer";
       sequencerComponents.startStopButton.textContent = "Start";
       clearTimeout(timeoutId);
     }

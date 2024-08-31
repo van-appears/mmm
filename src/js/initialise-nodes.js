@@ -7,9 +7,11 @@ module.exports = function initialiseNodes(model) {
 
   // microphone only gets initialised once
   let startIndex = 0;
-  if (mediaStream && !items[0]) {
+  if (mediaStream) {
     startIndex = 1;
-    items[0] = createMicrophone(audioCtx, model, 0, mediaStream);
+    if (!items[0]) {
+      items[0] = createMicrophone(audioCtx, model, 0, mediaStream);
+    }
   }
 
   for (let index = startIndex; index < 10; index++) {
