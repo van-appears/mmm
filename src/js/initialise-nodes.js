@@ -1,8 +1,8 @@
-const constants = require("./constants");
-const createMicrophone = require("./nodes/create-microphone");
-const Node = require("./nodes/Node");
+import constants from "./constants";
+import createMicrophone from "./nodes/create-microphone";
+import Node from "./nodes/Node";
 
-module.exports = function initialiseNodes(model) {
+export default function initialiseNodes(model) {
   const { audioCtx, items, mediaStream } = model;
 
   // microphone only gets initialised once
@@ -20,4 +20,4 @@ module.exports = function initialiseNodes(model) {
     }
     items[index] = new Node(audioCtx, model, index, constants.EMPTY, false);
   }
-};
+}

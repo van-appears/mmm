@@ -1,5 +1,5 @@
-const Node = require("./Node");
-const constants = require("../constants");
+import Node from "./Node";
+import constants from "../constants";
 
 class Echo extends Node {
   constructor(ctx, model, idx) {
@@ -76,8 +76,8 @@ class Echo extends Node {
   }
 }
 
-module.exports = function (ctx, model) {
+export default function (ctx, model) {
   return function (idx) {
     return new Echo(ctx, model, idx);
   };
-};
+}

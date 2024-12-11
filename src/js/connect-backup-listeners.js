@@ -1,11 +1,11 @@
-const constants = require("./constants");
-const applyCommand = require("./apply-command");
-const initialiseNodes = require("./initialise-nodes");
-const commandSplitter = /^([0-9]{1}) *([a-zA-Z]*) *(.*)$/;
-const components = require("./components");
-const { backup: backupComponents, sequencer: sequencerComponents } = components;
+import constants from "./constants";
+import applyCommand from "./apply-command";
+import initialiseNodes from "./initialise-nodes";
+import { backupComponents, sequencerComponents } from "./components";
 
-module.exports = function connectBackupListeners(model) {
+const commandSplitter = /^([0-9]{1}) *([a-zA-Z]*) *(.*)$/;
+
+export default function connectBackupListeners(model) {
   const executeCommand = applyCommand(model);
 
   function display() {
@@ -42,7 +42,7 @@ module.exports = function connectBackupListeners(model) {
   backupComponents.resetButton.onclick = function () {
     reset();
     display();
-    model.update("currentIdx", 0);
+    model.update("currentGraphIdx", 0);
   };
 
   backupComponents.importButton.onclick = function () {
@@ -68,7 +68,7 @@ module.exports = function connectBackupListeners(model) {
     sequencerComponents.delayField.value = first;
     sequencerComponents.content.value = remainder;
 
-    model.update("currentIdx", 0);
+    model.update("currentGraphIdx", 0);
   };
 
   backupComponents.copyButton.onclick = function () {
@@ -88,4 +88,4 @@ module.exports = function connectBackupListeners(model) {
       }
     }
   });
-};
+}

@@ -1,5 +1,6 @@
-const Node = require("./Node");
-const constants = require("../constants");
+import Node from "./Node";
+import constants from "../constants";
+
 const TYPES = ["lowpass", "highpass", "bandpass", "notch"];
 
 class Filter extends Node {
@@ -130,8 +131,8 @@ class Filter extends Node {
   }
 }
 
-module.exports = function (ctx, model) {
+export default function (ctx, model) {
   return function (idx) {
     return new Filter(ctx, model, idx);
   };
-};
+}

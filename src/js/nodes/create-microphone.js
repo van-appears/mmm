@@ -1,5 +1,5 @@
-const Node = require("./Node");
-const constants = require("../constants");
+import Node from "./Node";
+import constants from "../constants";
 
 class Microphone extends Node {
   constructor(ctx, model, idx, mediaStream) {
@@ -43,6 +43,6 @@ class Microphone extends Node {
   }
 }
 
-module.exports = function (ctx, model, idx, mediaStream) {
+export default function (ctx, model, idx, mediaStream) {
   return new Microphone(ctx, model, idx, mediaStream);
-};
+}

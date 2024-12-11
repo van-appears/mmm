@@ -1,10 +1,11 @@
-const createOscillator = require("./nodes/create-oscillator");
-const createFilter = require("./nodes/create-filter");
-const createDelay = require("./nodes/create-delay");
-const createEcho = require("./nodes/create-echo");
-const createGain = require("./nodes/create-gain");
+import createOscillator from "./nodes/create-oscillator";
+import createFilter from "./nodes/create-filter";
+import createDelay from "./nodes/create-delay";
+import createEcho from "./nodes/create-echo";
+import createGain from "./nodes/create-gain";
+import Sequencer from "./nodes/Sequencer";
 
-module.exports = function createModel(mediaStream) {
+export default function createModel(mediaStream) {
   const callbacks = [];
   function dispatch(obj, prop, val) {
     callbacks.forEach(callback => callback(obj, prop, val));
@@ -21,7 +22,8 @@ module.exports = function createModel(mediaStream) {
   const connections = new Array(10).fill(0).map(x => ({}));
   const types = {};
   const model = {
-    currentIdx: 0,
+    currentGraphIdx: 0,
+    currentSeqIdx: 0,
     audioCtx,
     mediaStream,
     items,
@@ -37,6 +39,10 @@ module.exports = function createModel(mediaStream) {
     }
   };
 
+  model.sequences = new Array(10)
+    .fill(0)
+    .map((x, idx) => new Sequencer(model, idx));
+
   types.oscillator = createOscillator(audioCtx, model);
   types.filter = createFilter(audioCtx, model);
   types.delay = createDelay(audioCtx, model);
@@ -46,4 +52,4 @@ module.exports = function createModel(mediaStream) {
   // for diagnostics
   window.model = model;
   return model;
-};
+}

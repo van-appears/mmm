@@ -1,5 +1,6 @@
-const Node = require("./Node");
-const constants = require("../constants");
+import Node from "./Node";
+import constants from "../constants";
+
 const TYPES = ["sawtooth", "sine", "square", "triangle"];
 
 class Oscillator extends Node {
@@ -131,8 +132,8 @@ class Oscillator extends Node {
   }
 }
 
-module.exports = function (ctx, model) {
+export default function (ctx, model) {
   return function (idx) {
     return new Oscillator(ctx, model, idx);
   };
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function (selectEl, currentVal, items, includeEmpty) {
+export default function (selectEl, currentVal, items, includeEmpty) {
   selectEl.replaceChildren();
 
   if (includeEmpty) {
@@ -21,4 +21,4 @@ module.exports = function (selectEl, currentVal, items, includeEmpty) {
     }
     selectEl.appendChild(option);
   }
-};
+}

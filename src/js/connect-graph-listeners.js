@@ -1,8 +1,8 @@
-const constants = require("./constants");
-const fillSelect = require("./fill-select");
-const graphComponents = require("./components").graph;
+import constants from "./constants";
+import fillSelect from "./fill-select";
+import { graphComponents } from "./components";
 
-module.exports = function connectGraphListeners(model) {
+export default function connectGraphListeners(model) {
   const { items, types, connections } = model;
   let current = null;
   let nextType = null;
@@ -76,31 +76,31 @@ module.exports = function connectGraphListeners(model) {
   }
 
   function convert() {
-    const newControl = types[nextType](model.currentIdx);
+    const newControl = types[nextType](model.currentGraphIdx);
     lastControl.setValuesTo(newControl);
-    const currentConnections = model.connections[model.currentIdx];
+    const currentConnections = model.connections[model.currentGraphIdx];
     Object.keys(currentConnections).forEach(key => {
       lastControl.connector().connect(currentConnections[key]);
       newControl.connector().connect(currentConnections[key]);
     });
 
     lastControl.destroy();
-    items[model.currentIdx] = newControl;
-    connectOption(model.currentIdx);
-    setOptionStyle(model.currentIdx);
+    items[model.currentGraphIdx] = newControl;
+    connectOption(model.currentGraphIdx);
+    setOptionStyle(model.currentGraphIdx);
   }
 
   graphComponents.playButton.onclick = function (evt) {
     if (current) {
       current.play(evt.target.checked);
-      setOptionStyle(model.currentIdx);
+      setOptionStyle(model.currentGraphIdx);
     }
   };
 
   graphComponents.optionButtons.forEach((optionButton, index) => {
     optionButton.onclick = function () {
-      const lastIdx = model.currentIdx;
-      model.update("currentIdx", index);
+      const lastIdx = model.currentGraphIdx;
+      model.update("currentGraphIdx", index);
       optionButton.selected();
       graphComponents.optionButtons[lastIdx].unselect();
     };
@@ -132,7 +132,7 @@ module.exports = function connectGraphListeners(model) {
     convertButton.onclick = function (evt) {
       if (current) {
         nextType = evt.target.value;
-        lastControl = items[model.currentIdx];
+        lastControl = items[model.currentGraphIdx];
         if (
           lastControl.type === nextType ||
           lastControl.type === constants.MICROPHONE
@@ -159,18 +159,18 @@ module.exports = function connectGraphListeners(model) {
   graphComponents.cancelButton.onclick = function (evt) {
     graphComponents.controlsArea.show(true);
     graphComponents.confirmArea.show(false);
-    connectOption(model.currentIdx);
+    connectOption(model.currentGraphIdx);
   };
 
   model.register((obj, prop, value) => {
     if (Array.isArray(obj)) {
       setOptionStyle(prop);
-    } else if (prop === "currentIdx") {
+    } else if (prop === "currentGraphIdx") {
       connectOption(value);
     } else if (prop === "window") {
       graphComponents.area.show(value === "graph");
     }
   });
 
-  model.update("currentIdx", 0);
-};
+  model.update("currentGraphIdx", 0);
+}

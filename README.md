@@ -36,6 +36,5 @@ TODO
 - disable graphs in destroy
 - layout
 - time change for val
-- multiple sequencers
 - looper
 - internal saves

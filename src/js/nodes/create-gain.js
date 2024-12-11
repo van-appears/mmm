@@ -1,5 +1,5 @@
-const Node = require("./Node");
-const constants = require("../constants");
+import Node from "./Node";
+import constants from "../constants";
 
 class Gain extends Node {
   constructor(ctx, model, idx) {
@@ -76,8 +76,8 @@ class Gain extends Node {
   }
 }
 
-module.exports = function (ctx, model) {
+export default function (ctx, model) {
   return function (idx) {
     return new Gain(ctx, model, idx);
   };
-};
+}

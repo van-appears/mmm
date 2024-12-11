@@ -1,4 +1,4 @@
-module.exports = function (model) {
+export default function (model) {
   const { items } = model;
 
   return function (idx, short, value) {
@@ -37,4 +37,4 @@ module.exports = function (model) {
       control.set(value);
     }
   };
-};
+}

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   DELAY: "delay",
   ECHO: "echo",
   EMPTY: "empty",
@@ -6,7 +6,7 @@ module.exports = {
   GAIN: "gain",
   MICROPHONE: "microphone",
   OSCILLATOR: "oscillator",
-  FALLBACK_DELAY: 1000, // 1 second
+  FALLBACK_DELAY_SECONDS: 1, // 1 second
   MAX_DELAY_SECONDS: 10,
   SEQUENCE_SEPARATOR: "---seq "
 };

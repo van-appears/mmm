@@ -59,6 +59,10 @@ button.playing {
   }
 }
 
+.sequencer button.playing {
+  box-shadow: 0px 4px #00bbbb;
+}
+
 button[data-selected="true"],
 button.selected {
   background: black;

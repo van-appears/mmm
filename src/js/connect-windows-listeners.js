@@ -1,7 +1,7 @@
-const windowsComponents = require("./components").windows;
+import { windowComponents } from "./components";
 
-module.exports = function connectWindowsListeners(model) {
-  const { graphButton, sequencerButton, backupButton } = windowsComponents;
+export default function connectWindowsListeners(model) {
+  const { graphButton, sequencerButton, backupButton } = windowComponents;
 
   graphButton.onclick = function () {
     graphButton.selected();
@@ -25,4 +25,4 @@ module.exports = function connectWindowsListeners(model) {
   };
 
   graphButton.click();
-};
+}

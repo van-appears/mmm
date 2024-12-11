@@ -1,4 +1,4 @@
-module.exports = function connectMediaStream(callback) {
+export default function connectMediaStream(callback) {
   const MEDIA_CONSTRAINTS = {
     audio: true,
     video: false
@@ -18,4 +18,4 @@ module.exports = function connectMediaStream(callback) {
     console.log("navigator.mediaDevices not supported");
     callback(null);
   }
-};
+}

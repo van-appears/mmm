@@ -84,10 +84,24 @@
         </div>
       </div>
       <div class="sequencer">
-        <label for="delay">Delay (s)</label>
-        <input id="delay" type="number" />
-        <button id="startstop">Start</button>
-        <textarea id="sequence"></textarea>
+        <div class="options">
+          <button value="0">0</button>
+          <button value="1">1</button>
+          <button value="2">2</button>
+          <button value="3">3</button>
+          <button value="4">4</button>
+          <button value="5">5</button>
+          <button value="6">6</button>
+          <button value="7">7</button>
+          <button value="8">8</button>
+          <button value="9">9</button>
+        </div>
+        <div class="controls">
+          <label for="delay">Delay (s)</label>
+          <input id="delay" type="number" />
+          <button id="startstop">Start</button>
+          <textarea id="sequence"></textarea>
+        </div>
       </div>
       <div class="backup">
         <button id="import">Apply</button>
@@ -104,5 +118,6 @@
         target="_blank"
       ></a>
     </div>
+    <script type="module" src="index.js"></script>
   </body>
 </html>

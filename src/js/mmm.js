@@ -1,10 +1,10 @@
-const createModel = require("./create-model");
-const connectMediaStream = require("./connect-media-stream");
-const connectGraphListeners = require("./connect-graph-listeners");
-const connectSequencerListeners = require("./connect-sequencer-listeners");
-const connectBackupListeners = require("./connect-backup-listeners");
-const connectWindowsListeners = require("./connect-windows-listeners");
-const initialiseNodes = require("./initialise-nodes");
+import createModel from "./create-model";
+import connectMediaStream from "./connect-media-stream";
+import connectGraphListeners from "./connect-graph-listeners";
+import connectSequencerListeners from "./connect-sequencer-listeners";
+import connectBackupListeners from "./connect-backup-listeners";
+import connectWindowsListeners from "./connect-windows-listeners";
+import initialiseNodes from "./initialise-nodes";
 
 window.onload = function () {
   const wrapper = document.querySelector(".wrapper");

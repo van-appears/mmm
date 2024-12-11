@@ -1,4 +1,4 @@
-module.exports = function (id) {
+export default function (id) {
   function addFunctions(element) {
     const baseClass = element.className || "";
     element.addClass = function (className) {
@@ -35,4 +35,4 @@ module.exports = function (id) {
 
   const nodes = document.querySelectorAll(id);
   return nodes.length > 1 ? addFunctionsAll(nodes) : addFunctions(nodes[0]);
-};
+}
