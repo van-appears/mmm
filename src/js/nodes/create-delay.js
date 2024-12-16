@@ -27,11 +27,21 @@ class Delay extends Node {
         label: "Time <= 10s",
         max: constants.MAX_DELAY_SECONDS,
         set(val) {
+          that.delay.delayTime.setValueCurveAtTime(
+            [that.delayTimeValue || val, val],
+            that.ctx.currentTime,
+            that.delayTimeTime || 0.001
+          );
           that.delayTimeValue = val;
-          that.delay.delayTime.setTargetAtTime(val * 1000, 0, 0);
         },
         get() {
           return that.delayTimeValue;
+        },
+        setTime(val) {
+          that.delayTimeTime = val;
+        },
+        getTime() {
+          return that.delayTimeTime;
         }
       },
       {

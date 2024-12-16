@@ -22,43 +22,49 @@ export const graphComponents = {
       area: select(".graph .controls .control:nth-child(1)"),
       shortText: select(".graph .controls .control:nth-child(1) .short"),
       longText: select(".graph .controls .control:nth-child(1) .long"),
-      input: select(".graph .controls .control:nth-child(1) input"),
-      select: select(".graph .controls .control:nth-child(1) select")
+      select: select(".graph .controls .control:nth-child(1) select"),
+      time: select(".graph .controls .control:nth-child(1) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(1) input:nth-child(3)")
     },
     {
       area: select(".graph .controls .control:nth-child(2)"),
       shortText: select(".graph .controls .control:nth-child(2) .short"),
       longText: select(".graph .controls .control:nth-child(2) .long"),
-      input: select(".graph .controls .control:nth-child(2) input"),
-      select: select(".graph .controls .control:nth-child(2) select")
+      select: select(".graph .controls .control:nth-child(2) select"),
+      time: select(".graph .controls .control:nth-child(2) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(2) input:nth-child(3)")
     },
     {
       area: select(".graph .controls .control:nth-child(3)"),
       shortText: select(".graph .controls .control:nth-child(3) .short"),
       longText: select(".graph .controls .control:nth-child(3) .long"),
-      input: select(".graph .controls .control:nth-child(3) input"),
-      select: select(".graph .controls .control:nth-child(3) select")
+      select: select(".graph .controls .control:nth-child(3) select"),
+      time: select(".graph .controls .control:nth-child(3) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(3) input:nth-child(3)")
     },
     {
       area: select(".graph .controls .control:nth-child(4)"),
       shortText: select(".graph .controls .control:nth-child(4) .short"),
       longText: select(".graph .controls .control:nth-child(4) .long"),
-      input: select(".graph .controls .control:nth-child(4) input"),
-      select: select(".graph .controls .control:nth-child(4) select")
+      select: select(".graph .controls .control:nth-child(4) select"),
+      time: select(".graph .controls .control:nth-child(4) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(4) input:nth-child(3)")
     },
     {
       area: select(".graph .controls .control:nth-child(5)"),
       shortText: select(".graph .controls .control:nth-child(5) .short"),
       longText: select(".graph .controls .control:nth-child(5) .long"),
-      input: select(".graph .controls .control:nth-child(5) input"),
-      select: select(".graph .controls .control:nth-child(5) select")
+      select: select(".graph .controls .control:nth-child(5) select"),
+      time: select(".graph .controls .control:nth-child(5) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(5) input:nth-child(3)")
     },
     {
       area: select(".graph .controls .control:nth-child(6)"),
       shortText: select(".graph .controls .control:nth-child(6) .short"),
       longText: select(".graph .controls .control:nth-child(6) .long"),
-      input: select(".graph .controls .control:nth-child(6) input"),
-      select: select(".graph .controls .control:nth-child(6) select")
+      select: select(".graph .controls .control:nth-child(6) select"),
+      time: select(".graph .controls .control:nth-child(6) input:nth-child(4)"),
+      input: select(".graph .controls .control:nth-child(6) input:nth-child(3)")
     }
   ]
 };

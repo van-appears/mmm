@@ -24,11 +24,21 @@ class Microphone extends Node {
         short: "g",
         label: "Gain",
         set(val) {
+          that.gain.gain.setValueCurveAtTime(
+            [that.gainValue || val, val],
+            that.ctx.currentTime,
+            that.gainTime || 0.001
+          );
           that.gainValue = val;
-          that.gain.gain.setTargetAtTime(val, 0, 0);
         },
         get() {
           return that.gainValue;
+        },
+        setTime(val) {
+          that.gainTime = val;
+        },
+        getTime() {
+          return that.gainTime;
         }
       }
     ];

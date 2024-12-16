@@ -177,9 +177,14 @@ a.sourceCode {
   width: 100px;
 }
 
-.control select,
-.control input {
+.control select {
   width: 150px;
   max-width: 150px;
+  padding: 0px;
+}
+
+.control input {
+  width: 71px;
+  max-width: 71px;
   padding: 0px;
 }

@@ -47,11 +47,14 @@ export default function connectGraphListeners(model) {
       controlComponent.shortText.textContent = `(${control.short})`;
       controlComponent.longText.textContent = control.label;
       controlComponent.input.show(false);
+      controlComponent.time.show(false);
       controlComponent.select.show(false);
 
       if (control.type === "val") {
         controlComponent.input.value = control.get();
         controlComponent.input.show(true);
+        controlComponent.time.value = control.getTime();
+        controlComponent.time.show(true);
       } else if (control.type === "in") {
         fillSelect(
           controlComponent.select,
@@ -124,6 +127,14 @@ export default function connectGraphListeners(model) {
         }
         current.controls()[index].set(numVal || val);
         graphComponents.componentLabel.textContent = current.label();
+      }
+    };
+    controlComponent.time.onchange = function (evt) {
+      if (current) {
+        const val = evt.target.value;
+        const numVal = parseFloat(val);
+        const control = current.controls()[index];
+        current.controls()[index].setTime(numVal);
       }
     };
   });

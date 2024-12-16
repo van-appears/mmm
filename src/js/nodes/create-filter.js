@@ -35,11 +35,21 @@ class Filter extends Node {
         short: "f",
         label: "Freq",
         set(val) {
+          that.filter.frequency.setValueCurveAtTime(
+            [that.freqValue || val, val],
+            that.ctx.currentTime,
+            that.freqTime || 0.001
+          );
           that.freqValue = val;
-          that.filter.frequency.setTargetAtTime(val, 0, 0);
         },
         get() {
           return that.freqValue;
+        },
+        setTime(val) {
+          that.freqTime = val;
+        },
+        getTime() {
+          return that.freqTime;
         }
       },
       {
@@ -64,11 +74,21 @@ class Filter extends Node {
         short: "q",
         label: "Q",
         set(val) {
+          that.filter.Q.setValueCurveAtTime(
+            [that.qValue || val, val],
+            that.ctx.currentTime,
+            that.qTime || 0.001
+          );
           that.qValue = val;
-          that.filter.Q.setTargetAtTime(val, 0, 0);
         },
         get() {
           return that.qValue;
+        },
+        setTime(val) {
+          that.qTime = val;
+        },
+        getTime() {
+          return that.qTime;
         }
       },
       {

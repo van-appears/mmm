@@ -31,11 +31,21 @@ class Echo extends Node {
         label: "Time <= 10s",
         max: constants.MAX_DELAY_SECONDS,
         set(val) {
+          that.delay.delayTime.setValueCurveAtTime(
+            [that.delayTimeValue || val, val],
+            that.ctx.currentTime,
+            that.delayTimeTime || 0.001
+          );
           that.delayTimeValue = val;
-          that.delay.delayTime.setTargetAtTime(val * 1000, 0, 0);
         },
         get() {
           return that.delayTimeValue;
+        },
+        setTime(val) {
+          that.delayTimeTime = val;
+        },
+        getTime() {
+          return that.delayTimeTime;
         }
       },
       {
@@ -43,11 +53,21 @@ class Echo extends Node {
         short: "s",
         label: "Sustain",
         set(val) {
+          that.gain.gain.setValueCurveAtTime(
+            [that.gainValue || val, val],
+            that.ctx.currentTime,
+            that.gainTime || 0.001
+          );
           that.gainValue = val;
-          that.gain.gain.setTargetAtTime(val, 0, 0);
         },
         get() {
           return that.gainValue;
+        },
+        setTime(val) {
+          that.gainTime = val;
+        },
+        getTime() {
+          return that.gainTime;
         }
       },
       {
