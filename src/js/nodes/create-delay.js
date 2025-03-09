@@ -27,6 +27,7 @@ class Delay extends Node {
         label: "Time <= 10s",
         max: constants.MAX_DELAY_SECONDS,
         set(val) {
+          that.delay.delayTime.cancelScheduledValues(0);
           that.delay.delayTime.setValueCurveAtTime(
             [that.delayTimeValue || val, val],
             that.ctx.currentTime,

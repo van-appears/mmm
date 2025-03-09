@@ -112,7 +112,11 @@ export default function connectGraphListeners(model) {
   graphComponents.controls.forEach((controlComponent, index) => {
     controlComponent.select.onchange = function (evt) {
       if (current) {
-        current.controls()[index].set(evt.target.value);
+        let val = parseFloat(evt.target.value);
+        if (!Number.isInteger(val)) {
+          val = evt.target.value;
+        }
+        current.controls()[index].set(val);
         graphComponents.componentLabel.textContent = current.label();
       }
     };

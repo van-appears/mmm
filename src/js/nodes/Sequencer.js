@@ -2,9 +2,6 @@ import applyCommand from "../apply-command";
 import constants from "../constants";
 
 const { FALLBACK_DELAY_SECONDS, MAX_DELAY_SECONDS } = constants;
-const commandSplitter = /^([0-9]{1}) *([a-zA-Z]{1,2}) *([0-9.]*)$/;
-const commandSplitterNoIdx = /^([a-zA-Z]{1,2}) *([0-9.]*)$/;
-const waitSplitter = /^w *([0-9.]*)(.*)$/;
 
 class Sequencer {
   constructor(model, idx) {
@@ -39,30 +36,18 @@ class Sequencer {
     }
     const pieces = (lines[this.lineNum] || "").split(";");
     for (let piece of pieces) {
-      const command = commandSplitter.exec(piece.trim());
-      if (command) {
-        const [, idx, key, value] = command;
-        this.executeCommand(idx, key, value);
-        this.lastIdx = idx;
-      } else {
-        const command2 = commandSplitterNoIdx.exec(piece.trim());
-        if (command2) {
-          const [, key, value] = command2;
-          this.executeCommand(this.lastIdx, key, value);
-        } else {
-          const waitCommand = waitSplitter.exec(piece.trim());
-          if (waitCommand) {
-            const [, duration, optUnit] = waitCommand;
-            const delay =
-              optUnit === "ms"
-                ? Math.floor(parseFloat(duration))
-                : Math.floor(parseFloat(duration) * 1000);
-
-            this.lineNum++;
-            this.timeoutId = setTimeout(this.processLine.bind(this), delay);
-            return;
-          }
+      const pieces = piece.split(" ").map(x => x);
+      const [idx, key, value, time] = pieces;
+      if (idx === 'w') {
+        const time = parseFloat(key);
+        if (time) {
+          this.lineNum++;
+          this.timeoutId = setTimeout(this.processLine.bind(this), time * 1000);
+          return;
         }
+      } else {
+        this.executeCommand(idx, key, value, time);
+        this.lastIdx = idx;
       }
     }
 

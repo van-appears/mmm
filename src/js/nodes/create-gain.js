@@ -26,6 +26,7 @@ class Gain extends Node {
         short: "g",
         label: "Gain",
         set(val) {
+          that.gain.gain.cancelScheduledValues(0);
           that.gain.gain.setValueCurveAtTime(
             [that.gainValue || val, val],
             that.ctx.currentTime,

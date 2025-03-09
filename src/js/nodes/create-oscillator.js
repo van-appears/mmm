@@ -60,6 +60,7 @@ class Oscillator extends Node {
         short: "f",
         label: "Freq",
         set(val) {
+          that.osc.frequency.cancelScheduledValues(0);
           that.osc.frequency.setValueCurveAtTime(
             [that.freqValue || val, val],
             that.ctx.currentTime,
@@ -99,6 +100,7 @@ class Oscillator extends Node {
         short: "g",
         label: "Gain",
         set(val) {
+          that.gain.gain.cancelScheduledValues(0);
           that.gain.gain.setValueCurveAtTime(
             [that.gainValue || val, val],
             that.ctx.currentTime,

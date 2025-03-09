@@ -10,7 +10,7 @@ class Echo extends Node {
     this.delay.connect(this.gain);
     this.gain.connect(this.delay);
     this._controls = this.initControls();
-    this._controls[0].set(1000);
+    this._controls[0].set(1);
     this._controls[1].set(0.5);
   }
 
@@ -31,6 +31,7 @@ class Echo extends Node {
         label: "Time <= 10s",
         max: constants.MAX_DELAY_SECONDS,
         set(val) {
+          that.delay.delayTime.cancelScheduledValues(0);
           that.delay.delayTime.setValueCurveAtTime(
             [that.delayTimeValue || val, val],
             that.ctx.currentTime,
@@ -53,6 +54,7 @@ class Echo extends Node {
         short: "s",
         label: "Sustain",
         set(val) {
+          that.gain.gain.cancelScheduledValues(0);
           that.gain.gain.setValueCurveAtTime(
             [that.gainValue || val, val],
             that.ctx.currentTime,

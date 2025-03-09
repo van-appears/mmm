@@ -1,7 +1,7 @@
 export default function (model) {
   const { items } = model;
 
-  return function (idx, short, value) {
+  return function (idx, short, value, time) {
     if (idx < 0) {
       return;
     }
@@ -24,9 +24,13 @@ export default function (model) {
     const controls = items[idx].controls() || [];
     const control = controls.find(x => x.short === short) || {};
     if (control.type === "val") {
-      const parsed = parseFloat(value);
-      if (parsed) {
-        control.set(parsed);
+      const parsedVal = parseFloat(value);
+      const parsedTime = parseFloat(time);
+      if (parsedVal) {
+        if (parsedTime >= 0) {
+          control.setTime(parsedTime);
+        }
+        control.set(parsedVal);
       }
     } else if (control.type === "in") {
       const parsed = parseInt(value);

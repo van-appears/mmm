@@ -35,6 +35,7 @@ class Filter extends Node {
         short: "f",
         label: "Freq",
         set(val) {
+          that.filter.frequency.cancelScheduledValues(0);
           that.filter.frequency.setValueCurveAtTime(
             [that.freqValue || val, val],
             that.ctx.currentTime,
@@ -74,6 +75,7 @@ class Filter extends Node {
         short: "q",
         label: "Q",
         set(val) {
+          that.filter.Q.cancelScheduledValues(0);
           that.filter.Q.setValueCurveAtTime(
             [that.qValue || val, val],
             that.ctx.currentTime,
